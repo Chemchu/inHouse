@@ -3,12 +3,13 @@
   "version": "1.0.50",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run --watch src/index.ts"
+    "dev": "bun run --watch src/index.tsx"
   },
   "dependencies": {
     "@elysiajs/html": "^0.6.5",
     "@supabase/supabase-js": "^2.33.2",
-    "elysia": "latest"
+    "elysia": "latest",
+    "tailwindcss": "^3.3.3"
   },
   "devDependencies": {
     "bun-types": "latest",
