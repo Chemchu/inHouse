@@ -1,0 +1,18 @@
+{
+  "name": "inHouse",
+  "version": "1.0.50",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "bun run --watch src/index.ts"
+  },
+  "dependencies": {
+    "@elysiajs/html": "^0.6.5",
+    "@supabase/supabase-js": "^2.33.2",
+    "elysia": "latest"
+  },
+  "devDependencies": {
+    "bun-types": "latest",
+    "typed-html": "^3.0.1"
+  },
+  "module": "src/index.js"
+}
