@@ -9,9 +9,10 @@ const BaseHtml = ({ children }: elements.Children) => `
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://unpkg.com/htmx.org@1.9.5" integrity="sha384-xcuj3WpfgjlKF+FXhSQFQ0ZNr39ln+hwjN3npfM9VBnUskLolQAcN80McRIVOPuO" crossorigin="anonymous"></script>
   <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
+  <meta name="htmx-config" content='{"globalViewTransitions":true}'>
   <title>inHouse</title>
 </head>
-<body>
+<body hx-boost="true">
   ${children}
 </body>
 </html>

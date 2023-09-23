@@ -1,7 +1,7 @@
 import * as elements from "typed-html";
-import BaseHtml from "../../../../component/BaseHtml";
+import BaseHtml from "../component/BaseHtml";
 
-const SignIn = () => {
+const SignUp = () => {
   return (
     <BaseHtml>
       <div class="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -145,4 +145,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default SignUp;
