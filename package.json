@@ -7,13 +7,14 @@
   },
   "dependencies": {
     "@elysiajs/html": "^0.6.5",
+    "@kitajs/html": "^2.2.2",
+    "@kitajs/ts-html-plugin": "^1.0.2",
     "@supabase/supabase-js": "^2.33.2",
     "elysia": "latest",
     "tailwindcss": "^3.3.3"
   },
   "devDependencies": {
-    "bun-types": "latest",
-    "typed-html": "^3.0.1"
+    "bun-types": "latest"
   },
   "module": "src/index.js"
 }

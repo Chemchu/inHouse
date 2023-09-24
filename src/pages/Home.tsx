@@ -1,9 +1,9 @@
-import * as elements from "typed-html";
+import Html from "@kitajs/html";
 import BaseHtml from "../component/BaseHtml";
 
 const Home = () => {
   return (
-    <BaseHtml>
+    <BaseHtml name="InHouse">
       <div class="bg-white">
         <header class="absolute inset-x-0 top-0 z-50">
           <nav class="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
