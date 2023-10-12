@@ -25,8 +25,12 @@ async fn main() {
         .unwrap();
 }
 
-static STYLE_CSS: &str = include_str!("../assets/style.css");
+static CSS_FILE_NAME: &str = "style.css";
+
+static STYLE_CSS: &str = format!("../assets/{}", CSS_FILE_NAME).parse().unwrap();
 static FAVICON: &str = include_str!("../assets/favicon.svg");
+static HTMX: &str = include_str!("../assets/htmx.min.js");
+static NONE: &str = "";
 
 async fn handle_assets(Path(path): Path<String>) -> impl IntoResponse {
     let mut headers = HeaderMap::new();
@@ -36,21 +40,14 @@ async fn handle_assets(Path(path): Path<String>) -> impl IntoResponse {
             headers.insert(header::CONTENT_TYPE, "text/css".parse().unwrap());
             (StatusCode::OK, headers, STYLE_CSS)
         }
-        "favicon.svg" => {
-            headers.insert(header::CONTENT_TYPE, "image/svg+xml".parse().unwrap());
-            (StatusCode::OK, headers, FAVICON)
-        }
+        "favicon.svg" => (StatusCode::OK, headers, FAVICON),
         "htmx.min.js" => {
             headers.insert(header::CONTENT_TYPE, "text/javascript".parse().unwrap());
-            (
-                StatusCode::OK,
-                headers,
-                include_str!("../assets/htmx.min.js"),
-            )
+            (StatusCode::OK, headers, HTMX)
         }
         _ => {
             headers.insert(header::CONTENT_TYPE, "text/plain".parse().unwrap());
-            (StatusCode::NOT_FOUND, headers, "")
+            (StatusCode::NOT_FOUND, headers, NONE)
         }
     }
 }
