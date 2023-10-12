@@ -25,9 +25,7 @@ async fn main() {
         .unwrap();
 }
 
-static CSS_FILE_NAME: &str = "style.css";
-
-static STYLE_CSS: &str = format!("../assets/{}", CSS_FILE_NAME).parse().unwrap();
+static STYLE_CSS: &str = include_str!("../assets/style.css");
 static FAVICON: &str = include_str!("../assets/favicon.svg");
 static HTMX: &str = include_str!("../assets/htmx.min.js");
 static NONE: &str = "";
