@@ -14,7 +14,8 @@ async fn main() {
     let app = Router::new()
         .route("/_assets/*path", get(handle_assets))
         .route("/", get(pages::home::home_page))
-        .route("/products", get(pages::product::product_page));
+        .route("/products", get(pages::product::product_page))
+        .fallback_service(get(pages::not_found::not_found_page));
 
     let addr_str = "127.0.0.1:3000";
     let addr = addr_str.parse::<SocketAddr>().unwrap();
