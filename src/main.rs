@@ -7,14 +7,14 @@ use axum::{
     routing::get,
     Router,
 };
-use pages::home::index_html;
 use std::net::SocketAddr;
 
 #[tokio::main]
 async fn main() {
     let app = Router::new()
         .route("/_assets/*path", get(handle_assets))
-        .route("/", get(index_html));
+        .route("/", get(pages::home::home_page))
+        .route("/products", get(pages::product::product_page));
 
     let addr_str = "127.0.0.1:3000";
     let addr = addr_str.parse::<SocketAddr>().unwrap();
@@ -38,7 +38,10 @@ async fn handle_assets(Path(path): Path<String>) -> impl IntoResponse {
             headers.insert(header::CONTENT_TYPE, "text/css".parse().unwrap());
             (StatusCode::OK, headers, STYLE_CSS)
         }
-        "favicon.svg" => (StatusCode::OK, headers, FAVICON),
+        "favicon.svg" => {
+            headers.insert(header::CONTENT_TYPE, "image/svg+xml".parse().unwrap());
+            (StatusCode::OK, headers, FAVICON)
+        }
         "htmx.min.js" => {
             headers.insert(header::CONTENT_TYPE, "text/javascript".parse().unwrap());
             (StatusCode::OK, headers, HTMX)

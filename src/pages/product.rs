@@ -5,11 +5,11 @@ use axum::{
 };
 
 #[derive(Template)]
-#[template(path = "home.html")]
-struct HomeTemplate;
+#[template(path = "products.html")]
+struct ProductTemplate;
 
-pub async fn home_page() -> impl IntoResponse {
-    let template = HomeTemplate {};
+pub async fn product_page() -> impl IntoResponse {
+    let template = ProductTemplate {};
     let reply_html = askama::Template::render(&template).unwrap();
 
     (StatusCode::OK, Html(reply_html).into_response())
