@@ -8,17 +8,31 @@ use axum::{
     Router,
 };
 use std::net::SocketAddr;
+use tower_http::trace::{self, TraceLayer};
+use tracing::Level;
 
 #[tokio::main]
 async fn main() {
+    tracing_subscriber::fmt()
+        .with_target(false)
+        .compact()
+        .init();
+
     let app = Router::new()
-        .route("/_assets/*path", get(handle_assets))
-        .route("/", get(pages::home::home_page))
-        .route("/products", get(pages::product::product_page))
-        .fallback_service(get(pages::not_found::not_found_page));
+        .route("/", get(pages::home::home_page_handler))
+        .route("/products", get(pages::product::product_page_handler))
+        .fallback_service(get(pages::not_found::not_found_page_handler))
+        .layer(
+            TraceLayer::new_for_http()
+                .make_span_with(trace::DefaultMakeSpan::new().level(Level::INFO))
+                .on_response(trace::DefaultOnResponse::new().level(Level::INFO)),
+        )
+        .route("/_assets/*path", get(assets_handler));
 
     let addr_str = "127.0.0.1:3000";
     let addr = addr_str.parse::<SocketAddr>().unwrap();
+
+    tracing::info!("Application started! Serving on {} 🚀", addr);
 
     axum::Server::bind(&addr)
         .serve(app.into_make_service())
@@ -31,7 +45,7 @@ static FAVICON: &str = include_str!("../assets/favicon.svg");
 static HTMX: &str = include_str!("../assets/htmx.min.js");
 static NONE: &str = "";
 
-async fn handle_assets(Path(path): Path<String>) -> impl IntoResponse {
+async fn assets_handler(Path(path): Path<String>) -> impl IntoResponse {
     let mut headers = HeaderMap::new();
 
     match path.as_str() {

@@ -8,7 +8,7 @@ use axum::{
 #[template(path = "not_found.html")]
 struct NotFoundTemplate;
 
-pub async fn not_found_page() -> impl IntoResponse {
+pub async fn not_found_page_handler() -> impl IntoResponse {
     let template = NotFoundTemplate {};
     let reply_html = askama::Template::render(&template).unwrap();
 

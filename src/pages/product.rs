@@ -8,7 +8,7 @@ use axum::{
 #[template(path = "products.html")]
 struct ProductTemplate;
 
-pub async fn product_page() -> impl IntoResponse {
+pub async fn product_page_handler() -> impl IntoResponse {
     let template = ProductTemplate {};
     let reply_html = askama::Template::render(&template).unwrap();
 
