@@ -21,6 +21,7 @@ sea-orm = { version = "0.12.3", features = [
     "with-uuid",
     "with-time",
 ] }
+log = "0.4.20"
 
 [package.metadata]
 name = "InHouse"
