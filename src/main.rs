@@ -75,6 +75,8 @@ async fn assets_handler(Path(path): Path<String>) -> impl IntoResponse {
 }
 
 async fn db_connection_handler() -> Result<DatabaseConnection, sea_orm::DbErr> {
+    dotenv::dotenv().ok();
+
     let conn_url = std::env::var("TURSO_URL");
     match &conn_url {
         Ok(conn_url) => {

@@ -22,6 +22,7 @@ sea-orm = { version = "0.12.3", features = [
     "with-time",
 ] }
 log = "0.4.20"
+dotenv = "0.15.0"
 
 [package.metadata]
 name = "InHouse"
