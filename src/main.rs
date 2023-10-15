@@ -11,6 +11,7 @@ use axum::{
 use sea_orm::{ConnectOptions, Database, DatabaseConnection};
 use std::net::SocketAddr;
 use std::time::Duration;
+use tokio::signal;
 use tower_http::trace::{self, TraceLayer};
 use tracing::Level;
 
@@ -22,6 +23,7 @@ async fn main() {
         .init();
 
     let db = db_connection_handler().await.unwrap();
+    let state: domain::AppState = domain::AppState { conn: db };
 
     let app = Router::new()
         .route("/", get(pages::home::home_page_handler))
@@ -33,7 +35,7 @@ async fn main() {
                 .on_response(trace::DefaultOnResponse::new().level(Level::INFO)),
         )
         .route("/_assets/*path", get(assets_handler))
-        .with_state(domain::AppState { conn: db });
+        .with_state(state);
 
     let addr_str = "127.0.0.1:3000";
     let addr = addr_str.parse::<SocketAddr>().unwrap();
@@ -42,6 +44,7 @@ async fn main() {
 
     axum::Server::bind(&addr)
         .serve(app.into_make_service())
+        // .with_graceful_shutdown(shutdown_signal_handle(state.conn)) // --> This is not working. Need to learn about ownership in Rust.
         .await
         .unwrap();
 }
@@ -77,13 +80,13 @@ async fn assets_handler(Path(path): Path<String>) -> impl IntoResponse {
 async fn db_connection_handler() -> Result<DatabaseConnection, sea_orm::DbErr> {
     dotenv::dotenv().ok();
 
-    let conn_url = std::env::var("TURSO_URL");
+    let conn_url = std::env::var("DATABASE_URL");
     match &conn_url {
         Ok(conn_url) => {
             tracing::info!("Database URL: {}", conn_url);
         }
         Err(_) => {
-            tracing::error!("TURSO_URL environment variable not found!");
+            tracing::error!("DATABASE_URL environment variable not found!");
             std::process::exit(1);
         }
     }
@@ -102,4 +105,30 @@ async fn db_connection_handler() -> Result<DatabaseConnection, sea_orm::DbErr> {
     let db = Database::connect(opt).await?;
 
     Ok(db)
+}
+
+async fn shutdown_signal_handle(db: DatabaseConnection) {
+    let ctrl_c = async {
+        signal::ctrl_c()
+            .await
+            .expect("Failed to install Ctrl+C handler");
+    };
+
+    #[cfg(unix)]
+    let terminate = async {
+        signal::unix::signal(signal::unix::SignalKind::terminate())
+            .expect("Failed to install signal handler")
+            .recv()
+            .await;
+    };
+
+    #[cfg(not(unix))]
+    let terminate = std::future::pending::<()>();
+
+    tokio::select! {
+        _ = ctrl_c => db.close().await.unwrap(),
+        _ = terminate => db.close().await.unwrap()
+    }
+
+    println!("Signal received, starting graceful shutdown");
 }
