@@ -1,3 +1,4 @@
+mod database;
 mod domain;
 mod pages;
 
@@ -8,10 +9,7 @@ use axum::{
     routing::get,
     Router,
 };
-use sea_orm::{ConnectOptions, Database, DatabaseConnection};
 use std::net::SocketAddr;
-use std::time::Duration;
-use tokio::signal;
 use tower_http::trace::{self, TraceLayer};
 use tracing::Level;
 
@@ -22,12 +20,14 @@ async fn main() {
         .compact()
         .init();
 
-    let db = db_connection_handler().await.unwrap();
+    let db = database::connect_to_db().await.unwrap();
     let state: domain::AppState = domain::AppState { conn: db };
 
     let app = Router::new()
         .route("/", get(pages::home::home_page_handler))
         .route("/products", get(pages::product::product_page_handler))
+        .route("/login", get(pages::login::login_page_handler))
+        .route("/sign-up", get(pages::signup::signup_page_handler))
         .fallback_service(get(pages::not_found::not_found_page_handler))
         .layer(
             TraceLayer::new_for_http()
@@ -44,7 +44,6 @@ async fn main() {
 
     axum::Server::bind(&addr)
         .serve(app.into_make_service())
-        // .with_graceful_shutdown(shutdown_signal_handle(state.conn)) // --> This is not working. Need to learn about ownership in Rust.
         .await
         .unwrap();
 }
@@ -75,60 +74,4 @@ async fn assets_handler(Path(path): Path<String>) -> impl IntoResponse {
             (StatusCode::NOT_FOUND, headers, NONE)
         }
     }
-}
-
-async fn db_connection_handler() -> Result<DatabaseConnection, sea_orm::DbErr> {
-    dotenv::dotenv().ok();
-
-    let conn_url = std::env::var("DATABASE_URL");
-    match &conn_url {
-        Ok(conn_url) => {
-            tracing::info!("Database URL: {}", conn_url);
-        }
-        Err(_) => {
-            tracing::error!("DATABASE_URL environment variable not found!");
-            std::process::exit(1);
-        }
-    }
-
-    let mut opt = ConnectOptions::new(conn_url.unwrap());
-    opt.max_connections(100)
-        .min_connections(5)
-        .connect_timeout(Duration::from_secs(8))
-        .acquire_timeout(Duration::from_secs(8))
-        .idle_timeout(Duration::from_secs(8))
-        .max_lifetime(Duration::from_secs(8))
-        .sqlx_logging(true)
-        .sqlx_logging_level(log::LevelFilter::Info)
-        .set_schema_search_path("public"); // Setting default PostgreSQL schema
-
-    let db = Database::connect(opt).await?;
-
-    Ok(db)
-}
-
-async fn shutdown_signal_handle(db: DatabaseConnection) {
-    let ctrl_c = async {
-        signal::ctrl_c()
-            .await
-            .expect("Failed to install Ctrl+C handler");
-    };
-
-    #[cfg(unix)]
-    let terminate = async {
-        signal::unix::signal(signal::unix::SignalKind::terminate())
-            .expect("Failed to install signal handler")
-            .recv()
-            .await;
-    };
-
-    #[cfg(not(unix))]
-    let terminate = std::future::pending::<()>();
-
-    tokio::select! {
-        _ = ctrl_c => db.close().await.unwrap(),
-        _ = terminate => db.close().await.unwrap()
-    }
-
-    println!("Signal received, starting graceful shutdown");
 }
