@@ -21,7 +21,7 @@ async fn main() {
         .init();
 
     let db = database::connect_to_db().await.unwrap();
-    let state: domain::AppState = domain::AppState { conn: db };
+    // let state: domain::AppState = domain::AppState { conn: db }; // Comment if you are not using it
 
     let app = Router::new()
         .route("/", get(pages::home::home_page_handler))
@@ -34,8 +34,8 @@ async fn main() {
                 .make_span_with(trace::DefaultMakeSpan::new().level(Level::INFO))
                 .on_response(trace::DefaultOnResponse::new().level(Level::INFO)),
         )
-        .route("/_assets/*path", get(assets_handler))
-        .with_state(state);
+        .route("/_assets/*path", get(assets_handler));
+    // .with_state(state); // Disable if you are not using DB connections
 
     let addr_str = "127.0.0.1:3000";
     let addr = addr_str.parse::<SocketAddr>().unwrap();
