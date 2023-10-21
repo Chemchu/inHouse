@@ -1,5 +1,4 @@
+pub mod auth;
 pub mod home;
-pub mod login;
 pub mod not_found;
 pub mod product;
-pub mod signup;

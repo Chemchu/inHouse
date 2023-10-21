@@ -5,11 +5,11 @@ use axum::{
 };
 
 #[derive(Template)]
-#[template(path = "login.html")]
-struct LoginTemplate;
+#[template(path = "recover_account.html")]
+struct RecoverAccountTemplate;
 
-pub async fn login_page_handler() -> impl IntoResponse {
-    let template = LoginTemplate {};
+pub async fn recover_account_page_handler() -> impl IntoResponse {
+    let template = RecoverAccountTemplate {};
     let reply_html = askama::Template::render(&template).unwrap();
 
     (StatusCode::OK, Html(reply_html).into_response())

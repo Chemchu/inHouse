@@ -13,6 +13,8 @@ use std::net::SocketAddr;
 use tower_http::trace::{self, TraceLayer};
 use tracing::Level;
 
+static EMPTY: &str = "";
+
 #[tokio::main]
 async fn main() {
     tracing_subscriber::fmt()
@@ -20,14 +22,13 @@ async fn main() {
         .compact()
         .init();
 
-    let db = database::connect_to_db().await.unwrap();
+    // let db = database::connect_to_db().await.unwrap();
     // let state: domain::AppState = domain::AppState { conn: db }; // Comment if you are not using it
 
     let app = Router::new()
         .route("/", get(pages::home::home_page_handler))
         .route("/products", get(pages::product::product_page_handler))
-        .route("/login", get(pages::login::login_page_handler))
-        .route("/sign-up", get(pages::signup::signup_page_handler))
+        .nest(EMPTY, pages::auth::routes())
         .fallback_service(get(pages::not_found::not_found_page_handler))
         .layer(
             TraceLayer::new_for_http()
