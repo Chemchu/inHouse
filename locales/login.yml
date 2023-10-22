@@ -1,0 +1,31 @@
+_version: 2
+title:
+  es_ES: Iniciar sesión
+  en_US: Login
+email:
+  es_ES: Correo electrónico
+  en_US: Email
+password:
+  es_ES: Contraseña
+  en_US: Password
+retry_password:
+  es_ES: Repetir contraseña
+  en_US: Repeat password
+did_you_forget_your_password:
+  es_ES: ¿Olvidaste tu contraseña?
+  en_US: Did you forget your password?
+no_account:
+  es_ES: ¿No tienes una cuenta?
+  en_US: Don't you have an account?
+sign_up:
+  es_ES: Regístrate
+  en_US: Sign up
+create_account:
+  es_ES: Crear cuenta
+  en_US: Create account
+already_have_an_account:
+  es_ES: ¿Ya tienes una cuenta?
+  en_US: Do you already have an account?
+login_here:
+  es_ES: Inicia sesión aquí
+  en_US: Login here

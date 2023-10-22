@@ -4,6 +4,8 @@ use axum::{
     response::{Html, IntoResponse},
 };
 
+use crate::localization::translator;
+
 #[derive(Template)]
 #[template(path = "signup.html")]
 struct SignupTemplate {
@@ -14,6 +16,7 @@ struct SignupTemplate {
     signup: &'static str,
     already_account: &'static str,
     login_here: &'static str,
+    translator: fn(foo: &str) -> String,
 }
 
 pub async fn signup_page_handler() -> impl IntoResponse {
@@ -25,6 +28,7 @@ pub async fn signup_page_handler() -> impl IntoResponse {
         signup: "Registrarse",
         already_account: "¿Ya tienes cuenta?",
         login_here: "inicia sesión aquí",
+        translator: todo!(),
     };
     let reply_html = askama::Template::render(&template).unwrap();
 
