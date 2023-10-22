@@ -3,9 +3,6 @@ mod domain;
 mod localization;
 mod pages;
 
-#[macro_use]
-extern crate rust_i18n;
-
 use axum::{
     extract::Path,
     http::{header, HeaderMap, StatusCode},
@@ -21,8 +18,6 @@ static EMPTY: &str = "";
 
 #[tokio::main]
 async fn main() {
-    i18n!("locales", fallback = "es_ES");
-
     tracing_subscriber::fmt()
         .with_target(false)
         .compact()

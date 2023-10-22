@@ -4,7 +4,7 @@ use axum::{
     response::{Html, IntoResponse},
 };
 
-use crate::localization::translator;
+use crate::localization::Translator;
 
 #[derive(Template)]
 #[template(path = "signup.html")]
