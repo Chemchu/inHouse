@@ -38,14 +38,8 @@ impl<'a> Translator<'a> {
             translations: init_translator(locale_path),
         }
     }
-}
 
-trait Translate<'a> {
-    fn translate(&self, key: &'a str) -> &str;
-}
-
-impl<'a> Translate<'a> for Translator<'a> {
-    fn translate(&self, key: &'a str) -> &str {
+    pub fn translate(&self, key: &'a str) -> &str {
         let translate_key = TranslationKey {
             key: (key, self.default_locale),
         };
@@ -103,6 +97,16 @@ fn init_translator<'a>(locale_path: &'a str) -> HashMap<TranslationKey, Translat
         }
     }
 
+    let k = TranslationKey {
+        key: ("login", "es_ES"),
+    };
+
+    let v = TranslationValue {
+        value: "Iniciar sesion",
+    };
     // key_value_map.clone()
-    HashMap::new()
+    let mut h = HashMap::new();
+    h.insert(k, v);
+
+    h
 }
