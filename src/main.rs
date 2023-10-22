@@ -23,11 +23,14 @@ async fn main() {
         .compact()
         .init();
 
+    // TODO: add when you are using DB connections
+    // let translator = localization::Translator::new("es_ES", "locales");
     // let db = database::connect_to_db().await.unwrap();
-    // let state: domain::AppState = domain::AppState { conn: db }; // Comment if you are not using it
-    let translator = localization::Translator::default();
-    println!("Tranlator size: {}", translator.translations.len());
-    println!("{}", translator.translate("login"));
+
+    // let state: domain::AppState = domain::AppState {
+    //     conn: db,
+    //     translator,
+    // }; // Comment if you are not using it
 
     let app = Router::new()
         .route("/", get(pages::home::home_page_handler))

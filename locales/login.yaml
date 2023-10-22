@@ -1,6 +1,9 @@
 title:
   es_ES: Iniciar sesión
   en_US: Login
+login:
+  es_ES: Iniciar sesión
+  en_US: Login
 email:
   es_ES: Correo electrónico
   en_US: Email

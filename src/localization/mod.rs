@@ -4,33 +4,23 @@ use serde::{Deserialize, Serialize};
 use walkdir::WalkDir;
 
 #[derive(Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
-pub struct TranslationKey<'a> {
-    #[serde(borrow)]
-    pub key: (&'a str, &'a str),
+pub struct TranslationKey {
+    pub key: (String, String),
 }
 
 #[derive(Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
-pub struct TranslationValue<'a> {
-    pub value: &'a str,
+pub struct TranslationValue {
+    pub value: String,
 }
 
 #[derive(Clone, Serialize)]
 pub struct Translator<'a> {
     pub default_locale: &'a str,
     pub locale_path: &'a str,
-    pub translations: HashMap<TranslationKey<'a>, TranslationValue<'a>>,
+    pub translations: HashMap<TranslationKey, TranslationValue>,
 }
 
 impl<'a> Translator<'a> {
-    pub fn default() -> Self {
-        let path = "src/locales";
-        Translator {
-            default_locale: "es_ES",
-            locale_path: path,
-            translations: init_translator(path),
-        }
-    }
-
     pub fn new(default_locale: &'a str, locale_path: &'a str) -> Self {
         Translator {
             default_locale,
@@ -39,15 +29,24 @@ impl<'a> Translator<'a> {
         }
     }
 
-    pub fn translate(&self, key: &'a str) -> &str {
+    pub fn translate(&self, key: &'a str, locale: Option<&'a str>) -> String {
         let translate_key = TranslationKey {
-            key: (key, self.default_locale),
+            key: (
+                key.to_string(),
+                match locale {
+                    Some(locale) => locale.to_string(),
+                    None => self.default_locale.to_string(),
+                },
+            ),
         };
 
         self.translations
             .get(&translate_key)
-            .unwrap_or(&TranslationValue { value: key })
+            .unwrap_or(&TranslationValue {
+                value: key.to_string(),
+            })
             .value
+            .clone()
     }
 }
 
@@ -76,37 +75,28 @@ fn init_translator<'a>(locale_path: &'a str) -> HashMap<TranslationKey, Translat
             }
 
             // Parse the YAML content into a temporary HashMap
-            let mut temp_map: HashMap<&str, HashMap<&str, &str>> = match serde_yaml::from_str(&yml)
-            {
-                Ok(map) => map,
-                Err(err) => {
-                    eprintln!("Failed to parse YAML: {}", err);
-                    continue;
-                }
-            };
+            let mut temp_map: HashMap<String, HashMap<String, String>> =
+                match serde_yaml::from_str(&yml) {
+                    Ok(map) => map,
+                    Err(err) => {
+                        eprintln!("Failed to parse YAML: {}", err);
+                        continue;
+                    }
+                };
 
             // Clone and insert the values from the temporary map into the final key_value_map
-            // for (key, value_map) in temp_map.drain() {
-            //     for (lang, value) in value_map {
-            //         key_value_map.insert(
-            //             TranslationKey { key: (key, lang) },
-            //             TranslationValue { value: value },
-            //         );
-            //     }
-            // }
+            for (key, value_map) in temp_map.drain() {
+                for (lang, value) in value_map {
+                    key_value_map.insert(
+                        TranslationKey {
+                            key: (key.clone(), lang.clone()),
+                        },
+                        TranslationValue { value: value },
+                    );
+                }
+            }
         }
     }
 
-    let k = TranslationKey {
-        key: ("login", "es_ES"),
-    };
-
-    let v = TranslationValue {
-        value: "Iniciar sesion",
-    };
-    // key_value_map.clone()
-    let mut h = HashMap::new();
-    h.insert(k, v);
-
-    h
+    key_value_map
 }
