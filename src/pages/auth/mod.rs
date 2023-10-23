@@ -6,7 +6,8 @@ pub mod signup;
 
 pub fn routes() -> Router {
     Router::new()
-        .route("/login", get(login::login_page_handler))
+        // TODO: fix this
+        // .route("/login", get(login::login_page_handler))
         .route("/sign-up", get(signup::signup_page_handler))
         .route(
             "/recover-account",

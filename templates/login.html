@@ -15,7 +15,7 @@ block content %}
     <h2
       class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
     >
-      {{ title }}
+      {{ translate("title") }}
     </h2>
   </div>
 
@@ -25,8 +25,9 @@ block content %}
         <label
           for="email"
           class="block text-sm font-medium leading-6 text-gray-900"
-          >{{ email }}</label
         >
+          {{ translate("email") }}
+        </label>
         <div class="mt-2">
           <input
             id="email"
@@ -44,7 +45,7 @@ block content %}
           <label
             for="password"
             class="block text-sm font-medium leading-6 text-gray-900"
-            >{{ password }}</label
+            >{{ translate("password") }}</label
           >
           <div class="text-sm">
             <a
@@ -52,8 +53,9 @@ block content %}
               hx-swap="innerHTML transition:true"
               hx-target="#content"
               class="font-semibold text-indigo-600 hover:text-indigo-500"
-              >¿Has olvidado la contraseña?</a
             >
+              {{ translate("did_you_forget_your_password")}}
+            </a>
           </div>
         </div>
         <div class="mt-2">
@@ -73,19 +75,19 @@ block content %}
           type="submit"
           class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
-          {{ login }}
+          {{ translate("login" )}}
         </button>
       </div>
     </form>
 
     <p class="mt-10 text-center text-sm text-gray-500">
-      {{ no_account }}
+      {{ translate("no_account") }}
       <a
         href="/sign-up"
         hx-swap="innerHTML transition:true"
         hx-target="#content"
         class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
-        >{{ create_account }}</a
+        >{{ translate("create_account") }}</a
       >
     </p>
   </div>

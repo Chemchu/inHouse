@@ -1,7 +1,10 @@
 use std::{collections::HashMap, fs::File, io::Read};
 
+use axum::extract::FromRef;
 use serde::{Deserialize, Serialize};
 use walkdir::WalkDir;
+
+use crate::domain::AppState;
 
 #[derive(Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
 pub struct TranslationKey {
@@ -47,6 +50,12 @@ impl<'a> Translator<'a> {
             })
             .value
             .clone()
+    }
+}
+
+impl<'a> FromRef<AppState<'a>> for Translator<'a> {
+    fn from_ref(input: &AppState<'a>) -> Self {
+        input.translator.clone()
     }
 }
 

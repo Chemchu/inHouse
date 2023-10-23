@@ -1,28 +1,25 @@
+use std::{env::Args, sync::Arc};
+
 use askama::Template;
 use axum::{
+    extract::State,
     http::StatusCode,
     response::{Html, IntoResponse},
 };
 
+use crate::domain::AppState;
+
 #[derive(Template)]
 #[template(path = "login.html")]
 struct LoginTemplate {
-    title: &'static str,
-    login: &'static str,
-    email: &'static str,
-    password: &'static str,
-    no_account: &'static str,
-    create_account: &'static str,
+    translate: fn(&'_ str) -> String,
 }
 
-pub async fn login_page_handler() -> impl IntoResponse {
+pub async fn login_page_handler(State(state): State<Arc<AppState<'_>>>) -> impl IntoResponse {
+    todo!();
     let template = LoginTemplate {
-        title: "Iniciar sesión",
-        login: "Iniciar sesión",
-        email: "Correo electrónico",
-        password: "Contraseña",
-        no_account: "¿No tienes cuenta?",
-        create_account: "Crear cuenta",
+        // translate: state.translator.translate,
+        translate: |arg| "test".to_string(),
     };
     let reply_html = askama::Template::render(&template).unwrap();
 
