@@ -3,7 +3,7 @@ use crate::localization::Translator;
 mod entities;
 
 #[derive(Clone)]
-pub struct AppState<'a> {
+pub struct AppState {
     pub conn: sea_orm::DatabaseConnection,
-    pub translator: Translator<'a>,
+    pub translator: Translator,
 }

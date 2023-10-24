@@ -3,13 +3,7 @@ mod domain;
 mod localization;
 mod pages;
 
-use axum::{
-    extract::Path,
-    http::{header, HeaderMap, StatusCode},
-    response::IntoResponse,
-    routing::get,
-    Router,
-};
+use axum::{routing::get, Router};
 use std::net::SocketAddr;
 use tower_http::trace::{self, TraceLayer};
 use tracing::Level;
@@ -27,16 +21,14 @@ async fn main() {
     let translator = localization::Translator::new("es_ES", "locales");
     let db = database::connect_to_db().await.unwrap();
 
-    let state = std::sync::Arc::new(domain::AppState {
+    let state = domain::AppState {
         conn: db,
         translator,
-    }); // Comment if you are not using it
+    }; // Comment if you are not using it
 
     let app = Router::new()
         .route("/", get(pages::home::home_page_handler))
-        .with_state(state)
-        .merge(pages::auth::routes())
-        // .with_state(state) // TODO: fix this to allowthe state to be in all routes
+        .merge(pages::auth::routes(state))
         .fallback_service(get(pages::not_found::not_found_page_handler))
         .layer(
             TraceLayer::new_for_http()

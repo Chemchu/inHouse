@@ -1,10 +1,7 @@
 use std::{collections::HashMap, fs::File, io::Read};
 
-use axum::extract::FromRef;
 use serde::{Deserialize, Serialize};
 use walkdir::WalkDir;
-
-use crate::domain::AppState;
 
 #[derive(Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
 pub struct TranslationKey {
@@ -17,14 +14,14 @@ pub struct TranslationValue {
 }
 
 #[derive(Clone, Serialize)]
-pub struct Translator<'a> {
-    pub default_locale: &'a str,
-    pub locale_path: &'a str,
+pub struct Translator {
+    pub default_locale: &'static str,
+    pub locale_path: &'static str,
     pub translations: HashMap<TranslationKey, TranslationValue>,
 }
 
-impl<'a> Translator<'a> {
-    pub fn new(default_locale: &'a str, locale_path: &'a str) -> Self {
+impl Translator {
+    pub fn new(default_locale: &'static str, locale_path: &'static str) -> Self {
         Translator {
             default_locale,
             locale_path,
@@ -32,7 +29,7 @@ impl<'a> Translator<'a> {
         }
     }
 
-    pub fn translate(&self, key: &'a str, locale: Option<&'a str>) -> String {
+    pub fn translate(&self, key: &'static str, locale: Option<&'static str>) -> String {
         let translate_key = TranslationKey {
             key: (
                 key.to_string(),
@@ -53,11 +50,12 @@ impl<'a> Translator<'a> {
     }
 }
 
-impl<'a> FromRef<AppState<'a>> for Translator<'a> {
-    fn from_ref(input: &AppState<'a>) -> Self {
-        input.translator.clone()
-    }
-}
+// TODO: Figure out how to use this
+// impl FromRef<AppState<'_>> for Translator {
+//     fn from_ref(input: AppState) -> Self {
+//         input.translator.clone()
+//     }
+// }
 
 fn init_translator<'a>(locale_path: &'a str) -> HashMap<TranslationKey, TranslationValue> {
     // Create a HashMap to store your key-value pairs as (String, String) tuples

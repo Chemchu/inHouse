@@ -1,5 +1,3 @@
-use std::{env::Args, sync::Arc};
-
 use askama::Template;
 use axum::{
     extract::State,
@@ -7,20 +5,19 @@ use axum::{
     response::{Html, IntoResponse},
 };
 
-use crate::domain::AppState;
+use crate::{domain::AppState, localization::Translator};
 
 #[derive(Template)]
 #[template(path = "login.html")]
 struct LoginTemplate {
-    translate: fn(&'_ str) -> String,
+    translator: Translator,
 }
 
-pub async fn login_page_handler(State(state): State<Arc<AppState<'_>>>) -> impl IntoResponse {
-    todo!();
+pub async fn login_page_handler(State(state): State<AppState>) -> impl IntoResponse {
     let template = LoginTemplate {
-        // translate: state.translator.translate,
-        translate: |arg| "test".to_string(),
+        translator: state.translator.clone(),
     };
+
     let reply_html = askama::Template::render(&template).unwrap();
 
     (StatusCode::OK, Html(reply_html).into_response())
