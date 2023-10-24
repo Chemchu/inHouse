@@ -20,6 +20,8 @@ pub struct Translator {
     pub translations: HashMap<TranslationKey, TranslationValue>,
 }
 
+static DEFAULT_LOCALE: &'static str = "en_US";
+
 impl Translator {
     pub fn new(locale: &'static str, locale_path: &'static str) -> Self {
         Translator {
@@ -27,6 +29,18 @@ impl Translator {
             locale_path,
             translations: init_translator(locale_path),
         }
+    }
+
+    fn translate_with_locale(&self, key: &'static str, locale: &'static str) -> String {
+        let translate_key = TranslationKey {
+            key: (key.to_string(), locale.to_string()),
+        };
+
+        self.translations
+            .get(&translate_key)
+            .expect("Translation not found! Please add it to the locales file.")
+            .value
+            .clone()
     }
 
     pub fn translate(&self, key: &'static str) -> String {
@@ -37,7 +51,7 @@ impl Translator {
         self.translations
             .get(&translate_key)
             .unwrap_or(&TranslationValue {
-                value: key.to_string(),
+                value: self.translate_with_locale(key, DEFAULT_LOCALE),
             })
             .value
             .clone()
