@@ -15,29 +15,23 @@ pub struct TranslationValue {
 
 #[derive(Clone, Serialize)]
 pub struct Translator {
-    pub default_locale: &'static str,
+    pub locale: &'static str,
     pub locale_path: &'static str,
     pub translations: HashMap<TranslationKey, TranslationValue>,
 }
 
 impl Translator {
-    pub fn new(default_locale: &'static str, locale_path: &'static str) -> Self {
+    pub fn new(locale: &'static str, locale_path: &'static str) -> Self {
         Translator {
-            default_locale,
+            locale,
             locale_path,
             translations: init_translator(locale_path),
         }
     }
 
-    pub fn translate(&self, key: &'static str, locale: Option<&'static str>) -> String {
+    pub fn translate(&self, key: &'static str) -> String {
         let translate_key = TranslationKey {
-            key: (
-                key.to_string(),
-                match locale {
-                    Some(locale) => locale.to_string(),
-                    None => self.default_locale.to_string(),
-                },
-            ),
+            key: (key.to_string(), self.locale.to_string()),
         };
 
         self.translations
@@ -49,13 +43,6 @@ impl Translator {
             .clone()
     }
 }
-
-// TODO: Figure out how to use this
-// impl FromRef<AppState<'_>> for Translator {
-//     fn from_ref(input: AppState) -> Self {
-//         input.translator.clone()
-//     }
-// }
 
 fn init_translator<'a>(locale_path: &'a str) -> HashMap<TranslationKey, TranslationValue> {
     // Create a HashMap to store your key-value pairs as (String, String) tuples

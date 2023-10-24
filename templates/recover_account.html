@@ -15,7 +15,7 @@
     <h2
       class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
     >
-      {{ f.translate("title", None)}}
+      {{ translator.translate("recover_account")}}
     </h2>
   </div>
 
@@ -44,19 +44,19 @@
           type="submit"
           class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
-          C
+          {{ translator.translate("send_recover_email")}}
         </button>
       </div>
     </form>
 
     <p class="mt-10 text-center text-sm text-gray-500">
-      A
+      {{ translator.translate("already_have_an_account")}}
       <a
         href="/login"
         hx-swap="innerHTML transition:true"
         class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
       >
-        B
+        {{ translator.translate("login_here")}}
       </a>
     </p>
   </div>

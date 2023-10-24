@@ -8,8 +8,6 @@ use std::net::SocketAddr;
 use tower_http::trace::{self, TraceLayer};
 use tracing::Level;
 
-static EMPTY: &str = "";
-
 #[tokio::main]
 async fn main() {
     tracing_subscriber::fmt()
