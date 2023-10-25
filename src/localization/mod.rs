@@ -1,5 +1,6 @@
 use std::{collections::HashMap, fs::File, io::Read};
 
+use axum::http::HeaderMap;
 use serde::{Deserialize, Serialize};
 use walkdir::WalkDir;
 
@@ -17,6 +18,7 @@ pub struct TranslationValue {
 pub struct Translator {
     pub locale: &'static str,
     pub locale_path: &'static str,
+    pub languages: Vec<String>,
     pub translations: HashMap<TranslationKey, TranslationValue>,
 }
 
@@ -24,10 +26,12 @@ static DEFAULT_LOCALE: &'static str = "en_US";
 
 impl Translator {
     pub fn new(locale: &'static str, locale_path: &'static str) -> Self {
+        let translations = init_translator(locale_path);
         Translator {
             locale,
             locale_path,
-            translations: init_translator(locale_path),
+            languages: translations.keys().map(|k| k.key.1.to_string()).collect(),
+            translations,
         }
     }
 
@@ -107,4 +111,44 @@ fn init_translator<'a>(locale_path: &'a str) -> HashMap<TranslationKey, Translat
     }
 
     key_value_map
+}
+
+pub fn get_locale_from_headers(headers: &HeaderMap, defined_locales: Vec<String>) -> String {
+    if let Some(accept_language) = headers.get("accept-language") {
+        let accept_language = accept_language.to_str().unwrap();
+
+        let mut languages: Vec<&str> = accept_language.split(',').collect();
+
+        languages.sort_by(|a, b| {
+            let a = a.split(';').collect::<Vec<&str>>()[0];
+            let b = b.split(';').collect::<Vec<&str>>()[0];
+
+            let a = a.split('-').collect::<Vec<&str>>();
+            let b = b.split('-').collect::<Vec<&str>>();
+
+            if a.len() == 2 && b.len() == 2 {
+                if a[0] == b[0] {
+                    return a[1].cmp(&b[1]);
+                }
+            }
+
+            a.len().cmp(&b.len())
+        });
+
+        for language in languages {
+            let language = language.split(';').collect::<Vec<&str>>()[0].to_string();
+            if defined_locales.contains(&language) {
+                return language.to_string();
+            }
+
+            if let Some(element) = defined_locales
+                .iter()
+                .find(|string| string.starts_with(&language))
+            {
+                return element.to_string();
+            }
+        }
+    }
+
+    DEFAULT_LOCALE.to_string()
 }

@@ -16,8 +16,8 @@ async fn main() {
         .init();
 
     // TODO: add when you are using DB connections
-    let translator = localization::Translator::new("es_ES", "locales");
     let db = database::connect_to_db().await.unwrap();
+    let translator = localization::Translator::new("es_ES", "locales");
 
     let state = domain::AppState {
         conn: db,
