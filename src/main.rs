@@ -22,6 +22,10 @@ async fn main() {
     let translator = localization::Translator::new("es_ES".to_string(), "locales");
 
     let state = domain::AppState {
+        supabase_api_key: std::env::var("SUPABASE_API_KEY")
+            .expect("SUPABASE_API_KEY environment variable not found!"),
+        supabase_url: std::env::var("SUPABASE_URL")
+            .expect("SUPABASE_URL environment variable not found!"),
         conn: db,
         translator,
     };

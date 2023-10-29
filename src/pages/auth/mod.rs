@@ -8,7 +8,10 @@ pub mod signup;
 
 pub fn routes(state: AppState) -> Router {
     Router::new()
-        .route("/login", get(login::login_page_handler))
+        .route(
+            "/login",
+            get(login::login_page_handler).post(login::login_handler),
+        )
         .route(
             "/sign-up",
             get(signup::signup_page_handler).post(signup::signup_handler),
