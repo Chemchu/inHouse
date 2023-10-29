@@ -16,7 +16,7 @@ pub struct TranslationValue {
 
 #[derive(Clone, Serialize)]
 pub struct Translator {
-    pub locale: &'static str,
+    pub locale: String,
     pub locale_path: &'static str,
     pub languages: Vec<String>,
     pub translations: HashMap<TranslationKey, TranslationValue>,
@@ -25,7 +25,7 @@ pub struct Translator {
 static DEFAULT_LOCALE: &'static str = "en_US";
 
 impl Translator {
-    pub fn new(locale: &'static str, locale_path: &'static str) -> Self {
+    pub fn new(locale: String, locale_path: &'static str) -> Self {
         let translations = init_translator(locale_path);
         Translator {
             locale,

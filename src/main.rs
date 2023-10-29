@@ -1,5 +1,6 @@
 mod database;
 mod domain;
+mod layer;
 mod localization;
 mod pages;
 
@@ -17,7 +18,7 @@ async fn main() {
 
     // TODO: add when you are using DB connections
     let db = database::connect_to_db().await.unwrap();
-    let translator = localization::Translator::new("es_ES", "locales");
+    let translator = localization::Translator::new("es_ES".to_string(), "locales");
 
     let state = domain::AppState {
         conn: db,

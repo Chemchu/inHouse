@@ -1,6 +1,6 @@
-use axum::{routing::get, Router};
+use axum::{middleware, routing::get, Router};
 
-use crate::domain::AppState;
+use crate::{domain::AppState, layer};
 
 pub mod login;
 pub mod recover_account;
@@ -14,5 +14,9 @@ pub fn routes(state: AppState) -> Router {
             "/recover-account",
             get(recover_account::recover_account_page_handler),
         )
+        .layer(middleware::from_fn_with_state(
+            state.clone(),
+            layer::inject_localization,
+        ))
         .with_state(state)
 }
