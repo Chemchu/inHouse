@@ -42,7 +42,7 @@ impl Translator {
 
         self.translations
             .get(&translate_key)
-            .expect("Translation not found! Please add it to the locales file.")
+            .expect(format!("Translation not found for key: {}", key).as_str())
             .value
             .clone()
     }

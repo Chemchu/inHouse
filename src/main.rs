@@ -23,7 +23,7 @@ async fn main() {
     let state = domain::AppState {
         conn: db,
         translator,
-    }; // Comment if you are not using it
+    };
 
     let app = Router::new()
         .route("/", get(pages::home::home_page_handler))

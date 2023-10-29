@@ -1,3 +1,4 @@
+use crate::domain::AppState;
 use askama::Template;
 use axum::{
     extract::State,
@@ -5,12 +6,10 @@ use axum::{
     response::{Html, IntoResponse},
 };
 
-use crate::{domain::AppState, localization::Translator};
-
 #[derive(Template)]
 #[template(path = "signup.html")]
 struct SignupTemplate {
-    translator: Translator,
+    translator: crate::localization::Translator,
 }
 
 pub async fn signup_page_handler(State(state): State<AppState>) -> impl IntoResponse {

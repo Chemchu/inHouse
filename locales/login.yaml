@@ -11,7 +11,7 @@ retry_password:
   es_ES: Repetir contraseña
   en_US: Repeat password
 did_you_forget_your_password:
-  es_ES: ¿Olvidaste tu contraseña?
+  es_ES: ¿Has olvidado tu contraseña?
   en_US: Did you forget your password?
 no_account:
   es_ES: ¿No tienes una cuenta?
@@ -29,7 +29,7 @@ login_here:
   es_ES: inicia sesión aquí
   en_US: login here
 register_here:
-  es_ES: aquí puedes registrarte
+  es_ES: puedes registrarte aquí
   en_US: you can register here
 recover_password:
   es_ES: Recuperar contraseña

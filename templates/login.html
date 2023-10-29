@@ -15,7 +15,7 @@ block content %}
     <h2
       class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
     >
-      Iniciar sesión
+      {{translator.translate("login")}}
     </h2>
   </div>
 
@@ -26,7 +26,7 @@ block content %}
           for="email"
           class="block text-sm font-medium leading-6 text-gray-900"
         >
-          Correo electrónico
+          {{translator.translate("email")}}
         </label>
         <div class="mt-2">
           <input
@@ -45,7 +45,7 @@ block content %}
           <label
             for="password"
             class="block text-sm font-medium leading-6 text-gray-900"
-            >Contraseña</label
+            >{{ translator.translate("password") }}</label
           >
           <div class="text-sm">
             <a
@@ -54,7 +54,7 @@ block content %}
               hx-target="#content"
               class="font-semibold text-indigo-600 hover:text-indigo-500"
             >
-              ¿Has olvidado tu contraseña?
+              {{ translator.translate("did_you_forget_your_password") }}
             </a>
           </div>
         </div>
@@ -75,19 +75,19 @@ block content %}
           type="submit"
           class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
-          Iniciar sesión
+          {{ translator.translate("login") }}
         </button>
       </div>
     </form>
 
     <p class="mt-10 text-center text-sm text-gray-500">
-      ¿No tienes una cuenta?
+      {{ translator.translate("no_account") }}
       <a
         href="/sign-up"
         hx-swap="innerHTML transition:true"
         hx-target="#content"
         class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
-        >aquí puedes registrate</a
+        >{{ translator.translate("register_here") }}</a
       >
     </p>
   </div>
