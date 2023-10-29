@@ -1,3 +1,4 @@
+mod components;
 mod database;
 mod domain;
 mod layer;

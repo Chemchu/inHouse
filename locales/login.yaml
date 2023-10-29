@@ -40,3 +40,15 @@ recover_account:
 send_recover_email:
   es_ES: Enviar correo de recuperación
   en_US: Send recovery email
+signup_email_sent:
+  es_ES: Se ha enviado un correo de confirmación a tu dirección de correo electrónico.
+  en_US: A confirmation email has been sent to your email address.
+signup_completed:
+  es_ES: Registro completado.
+  en_US: Registration completed.
+signup_failed:
+  es_ES: No se ha podido completar el registro.
+  en_US: Registration failed.
+try_again_later:
+  es_ES: Por favor, inténtalo de nuevo más tarde.
+  en_US: Please, try again later.
