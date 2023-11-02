@@ -4,6 +4,7 @@ mod domain;
 mod layer;
 mod localization;
 mod pages;
+mod services;
 
 use axum::{routing::get, Router};
 use std::net::SocketAddr;
@@ -12,6 +13,9 @@ use tracing::Level;
 
 #[tokio::main]
 async fn main() {
+    dotenv::dotenv().ok();
+    dotenv::from_filename(format!(".env.{}", std::env::var("ENVIRONMENT").unwrap())).ok();
+
     tracing_subscriber::fmt()
         .with_target(false)
         .compact()

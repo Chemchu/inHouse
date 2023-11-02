@@ -3,7 +3,7 @@ use std::time::Duration;
 use sea_orm::{ConnectOptions, Database, DatabaseConnection};
 
 pub async fn connect_to_db() -> Result<DatabaseConnection, sea_orm::DbErr> {
-    dotenv::dotenv().ok();
+    // dotenv::from_filename(format!(".env.{}", std::env::var("ENVIRONMENT").unwrap())).ok();
 
     let conn_url = std::env::var("DATABASE_URL");
     match &conn_url {

@@ -1,6 +1,7 @@
 use crate::{
     components::sign_up_message::{SignUpFailMessage, SignUpSuccessMessage},
     domain::AppState,
+    services::auth::exists_by_email,
 };
 use askama::Template;
 use axum::{
@@ -40,6 +41,20 @@ pub async fn signup_handler(
 ) -> impl IntoResponse {
     let correct_values = validate_form(&payload);
     if !correct_values {
+        tracing::info!("Sign up form validation failed ❌");
+        let template = SignUpFailMessage {
+            translator: state.translator.clone(),
+        };
+
+        let reply_html = askama::Template::render(&template).unwrap();
+
+        return (StatusCode::OK, Html(reply_html).into_response());
+    }
+
+    let email_in_use = exists_by_email(&state, &payload.email).await.unwrap();
+    if email_in_use {
+        tracing::info!("Email already in use ❌");
+
         let template = SignUpFailMessage {
             translator: state.translator.clone(),
         };

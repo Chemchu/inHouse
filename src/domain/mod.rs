@@ -1,6 +1,6 @@
 use crate::localization::Translator;
 
-mod entities;
+pub mod entities;
 
 #[derive(Clone)]
 pub struct AppState {

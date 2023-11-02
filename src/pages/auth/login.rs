@@ -1,10 +1,11 @@
 use askama::Template;
 use axum::{
     extract::State,
-    http::StatusCode,
+    http::{HeaderMap, StatusCode},
     response::{Html, IntoResponse},
     Form,
 };
+use reqwest::{header, Error, Response};
 use serde::Deserialize;
 
 use crate::{domain::AppState, localization::Translator};
@@ -32,60 +33,66 @@ pub struct LoginForm {
 }
 
 // TODO: Implement login_handler
-pub async fn login_handler(State(state): State<AppState>, Form(payload): Form<LoginForm>) {
-    let mut body = std::collections::HashMap::new();
-    body.insert("email", &payload.email);
-    body.insert("password", &payload.password);
+pub async fn login_handler(
+    headers: HeaderMap,
+    State(state): State<AppState>,
+    Form(payload): Form<LoginForm>,
+) -> impl IntoResponse {
+    if headers.contains_key(header::AUTHORIZATION) {
+        tracing::debug!("User already logged in");
+        return (
+            StatusCode::FOUND,
+            [(header::LOCATION, "/dashboard")].into_response(),
+        );
+    }
 
-    let login_response = reqwest::Client::new()
+    match login(&state, &payload.email, &payload.password).await {
+        Ok(response) => {
+            tracing::info!("Supabase login successful: {:?}", response);
+            let status = response.status();
+            if status.is_success() {
+                // Set the JWT token from response as a Authorization token
+                let body = response.text().await.unwrap();
+                let token: serde_json::Value = serde_json::from_str(&body).unwrap();
+                (
+                    StatusCode::FOUND,
+                    [
+                        (
+                            header::AUTHORIZATION,
+                            format!("Bearer {}", token["access_token"]),
+                        ),
+                        (header::LOCATION, "/dashboard".parse().unwrap()),
+                    ]
+                    .into_response(),
+                )
+            } else {
+                (
+                    StatusCode::UNAUTHORIZED,
+                    Html("Error al iniciar sesión").into_response(),
+                )
+            }
+        }
+        Err(response) => {
+            tracing::debug!("Supabase login failed: {:?}", response);
+            (
+                StatusCode::UNAUTHORIZED,
+                Html("Error al iniciar sesión").into_response(),
+            )
+        }
+    }
+}
+
+async fn login(state: &AppState, email: &str, password: &str) -> Result<Response, Error> {
+    let mut body = std::collections::HashMap::new();
+    body.insert("email", email);
+    body.insert("password", password);
+
+    reqwest::Client::new()
         .post(format!("{}/auth/v1/token", &state.supabase_url))
         .query(&[("grant_type", "password")])
         .header("apikey", &state.supabase_api_key)
         .header("Content-Type", "application/json")
         .json(&body)
         .send()
-        .await; // Inicia sesion bien y devuelve el token
-
-    tracing::info!("login_response: {:?}", login_response);
-
-    // match login_response {
-    //     Ok(response) => {
-    //         let status = response.status();
-    //         if status.is_success() {
-    //             let body = response.text().await.unwrap();
-    //             let token: serde_json::Value = serde_json::from_str(&body).unwrap();
-    //             let token = token["access_token"].as_str().unwrap();
-    //             let cookie = axum::http::Cookie::build("token", token)
-    //                 .path("/")
-    //                 .secure(true)
-    //                 .http_only(true)
-    //                 .finish();
-    //             let mut response = axum::http::Response::new(());
-    //             response.headers_mut().insert(
-    //                 axum::http::header::SET_COOKIE,
-    //                 cookie.to_string().parse().unwrap(),
-    //             );
-    //             response
-    //                 .headers_mut()
-    //                 .insert(axum::http::header::LOCATION, "/".parse().unwrap());
-    //             *response.status_mut() = axum::http::StatusCode::FOUND;
-    //             response
-    //         } else {
-    //             let mut response = axum::http::Response::new(());
-    //             response
-    //                 .headers_mut()
-    //                 .insert(axum::http::header::LOCATION, "/login".parse().unwrap());
-    //             *response.status_mut() = axum::http::StatusCode::FOUND;
-    //             response
-    //         }
-    //     }
-    //     _ => {
-    //         let mut response = axum::http::Response::new(());
-    //         response
-    //             .headers_mut()
-    //             .insert(axum::http::header::LOCATION, "/login".parse().unwrap());
-    //         *response.status_mut() = axum::http::StatusCode::FOUND;
-    //         response
-    //     }
-    // }
+        .await // Inicia sesion bien y devuelve el token
 }
