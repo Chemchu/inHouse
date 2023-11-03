@@ -51,7 +51,7 @@ pub async fn signup_handler(
         return (StatusCode::OK, Html(reply_html).into_response());
     }
 
-    let email_in_use = exists_by_email(&state, &payload.email).await.unwrap();
+    let email_in_use = exists_by_email(&state, &payload.email).await;
     if email_in_use {
         tracing::info!("Email already in use ❌");
 
