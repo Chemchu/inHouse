@@ -16,10 +16,7 @@ async fn main() {
     dotenv::dotenv().ok();
     dotenv::from_filename(format!(".env.{}", std::env::var("ENVIRONMENT").unwrap())).ok();
 
-    tracing_subscriber::fmt()
-        .with_target(false)
-        .compact()
-        .init();
+    tracing_subscriber::fmt().with_target(false).pretty().init();
 
     // TODO: add when you are using DB connections
     let db = database::connect_to_db().await.unwrap();

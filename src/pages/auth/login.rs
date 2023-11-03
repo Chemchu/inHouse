@@ -6,7 +6,7 @@ use axum::{
     Form,
 };
 use reqwest::{header, Error, Response};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 use crate::{domain::AppState, localization::Translator};
 
@@ -32,7 +32,48 @@ pub struct LoginForm {
     password: String,
 }
 
-// TODO: Implement login_handler
+#[derive(Deserialize, Serialize, Debug)]
+struct LoggedUser {
+    id: String,
+    aud: String,
+    role: String,
+    email: String,
+    email_confirmed_at: String,
+    phone: String,
+    confirmed_at: String,
+    last_sign_in_at: String,
+    created_at: String,
+    updated_at: String,
+}
+
+#[derive(Deserialize, Serialize, Debug)]
+struct LoginResponse {
+    access_token: String,
+    token_type: String,
+    expires_in: u32,
+    expires_at: u32,
+    refresh_token: String,
+    user: LoggedUser,
+}
+
+impl LoginResponse {
+    fn cookies(&self) -> HeaderMap {
+        let mut header_map = HeaderMap::new();
+
+        header_map.insert(
+            header::SET_COOKIE,
+            format!(
+                "sb:token={}; sb:refresh_token={}; Max-Age={}; Path=/; HttpOnly; Secure; SameSite=Strict",
+                self.access_token, self.refresh_token ,self.expires_in
+            )
+            .parse()
+            .unwrap(),
+        );
+
+        header_map
+    }
+}
+
 pub async fn login_handler(
     headers: HeaderMap,
     State(state): State<AppState>,
@@ -48,24 +89,16 @@ pub async fn login_handler(
 
     match login(&state, &payload.email, &payload.password).await {
         Ok(response) => {
-            tracing::info!("Supabase login successful: {:?}", response);
             let status = response.status();
             if status.is_success() {
-                // Set the JWT token from response as a Authorization token
                 let body = response.text().await.unwrap();
-                let token: serde_json::Value = serde_json::from_str(&body).unwrap();
-                (
-                    StatusCode::FOUND,
-                    [
-                        (
-                            header::AUTHORIZATION,
-                            format!("Bearer {}", token["access_token"]),
-                        ),
-                        (header::LOCATION, "/dashboard".parse().unwrap()),
-                    ]
-                    .into_response(),
-                )
+
+                tracing::info!("Supabase login successful: {:?}", body);
+
+                let login_response: LoginResponse = serde_json::from_str(&body).unwrap();
+                (StatusCode::OK, login_response.cookies().into_response())
             } else {
+                tracing::info!("Supabase login failed: {:?}", response);
                 (
                     StatusCode::UNAUTHORIZED,
                     Html("Error al iniciar sesión").into_response(),
