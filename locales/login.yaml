@@ -49,6 +49,9 @@ signup_completed:
 signup_failed:
   es_ES: No se ha podido completar el registro.
   en_US: Registration failed.
+signup_server_error:
+  es_ES: Ha ocurrido un error inesperado en el servidor.
+  en_US: An unexpected error has occurred in the server.
 try_again_later:
   es_ES: Por favor, inténtalo de nuevo más tarde.
   en_US: Please, try again later.

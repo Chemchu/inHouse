@@ -37,7 +37,11 @@ async fn main() {
     let app = Router::new()
         .route("/", get(pages::home::home_page_handler))
         .merge(pages::auth::routes(state))
-        .fallback_service(get(pages::not_found::not_found_page_handler))
+        .route(
+            "/internal-error",
+            get(pages::generic::internal_error::internal_error_page_handler),
+        )
+        .fallback_service(get(pages::generic::not_found::not_found_page_handler))
         .layer(
             TraceLayer::new_for_http()
                 .make_span_with(trace::DefaultMakeSpan::new().level(Level::INFO))

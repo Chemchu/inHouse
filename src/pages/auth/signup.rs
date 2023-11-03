@@ -1,5 +1,7 @@
 use crate::{
-    components::sign_up_message::{SignUpFailMessage, SignUpSuccessMessage},
+    components::sign_up_message::{
+        SignUpFailMessage, SignUpServerErrorMessage, SignUpSuccessMessage,
+    },
     domain::AppState,
     services::auth::exists_by_email,
 };
@@ -12,8 +14,15 @@ use axum::{
 };
 use serde::Deserialize;
 
+#[derive(Deserialize)]
+pub struct SignUpForm {
+    email: String,
+    password: String,
+    retry_password: String,
+}
+
 #[derive(Template)]
-#[template(path = "signup.html")]
+#[template(path = "auth/signup/signup.html")]
 struct SignupTemplate {
     translator: crate::localization::Translator,
 }
@@ -28,20 +37,13 @@ pub async fn signup_page_handler(State(state): State<AppState>) -> impl IntoResp
     (StatusCode::OK, Html(reply_html).into_response())
 }
 
-#[derive(Deserialize)]
-pub struct SignUpForm {
-    email: String,
-    password: String,
-    retry_password: String,
-}
-
 pub async fn signup_handler(
     State(state): State<AppState>,
     Form(payload): Form<SignUpForm>,
 ) -> impl IntoResponse {
     let correct_values = validate_form(&payload);
     if !correct_values {
-        tracing::info!("Sign up form validation failed ❌");
+        tracing::info!("Sign up form validation failed ⚠");
         let template = SignUpFailMessage {
             translator: state.translator.clone(),
         };
@@ -52,17 +54,32 @@ pub async fn signup_handler(
     }
 
     let email_in_use = exists_by_email(&state, &payload.email).await;
-    if email_in_use {
-        tracing::info!("Email already in use ❌");
+    match email_in_use {
+        Ok(is_email_used) => {
+            if is_email_used {
+                tracing::info!("Email already in use ⚠");
 
-        let template = SignUpFailMessage {
-            translator: state.translator.clone(),
-        };
+                let template = SignUpFailMessage {
+                    translator: state.translator.clone(),
+                };
 
-        let reply_html = askama::Template::render(&template).unwrap();
+                let reply_html = askama::Template::render(&template).unwrap();
 
-        return (StatusCode::OK, Html(reply_html).into_response());
-    }
+                return (StatusCode::OK, Html(reply_html).into_response());
+            }
+        }
+        Err(e) => {
+            tracing::error!("Database Error ❌: {}", e);
+
+            let template = SignUpServerErrorMessage {
+                translator: state.translator.clone(),
+            };
+
+            let reply_html = askama::Template::render(&template).unwrap();
+
+            return (StatusCode::OK, Html(reply_html).into_response());
+        }
+    };
 
     let mut body = std::collections::HashMap::new();
     body.insert("email", &payload.email);

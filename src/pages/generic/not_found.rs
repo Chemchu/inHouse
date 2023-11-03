@@ -5,7 +5,7 @@ use axum::{
 };
 
 #[derive(Template)]
-#[template(path = "not_found.html")]
+#[template(path = "generic/not_found.html")]
 struct NotFoundTemplate;
 
 pub async fn not_found_page_handler() -> impl IntoResponse {

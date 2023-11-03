@@ -8,7 +8,7 @@ use axum::{
 use crate::domain::AppState;
 
 #[derive(Template)]
-#[template(path = "recover_account.html")]
+#[template(path = "auth/login/recover_account.html")]
 struct RecoverAccountTemplate {
     translator: crate::localization::Translator,
 }

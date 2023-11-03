@@ -11,7 +11,7 @@ use serde::Deserialize;
 use crate::{domain::AppState, localization::Translator};
 
 #[derive(Template)]
-#[template(path = "login.html")]
+#[template(path = "auth/login/login.html")]
 struct LoginTemplate {
     translator: Translator,
 }
