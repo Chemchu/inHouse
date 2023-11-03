@@ -3,9 +3,8 @@ use cached::TimedSizedCache;
 use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
 
 use crate::domain;
-use crate::domain::entities::users::{self, Entity as User};
+use crate::domain::entity::users::{self, Entity as User};
 
-// TODO: devolver un error en vez de un bool y validar fuera
 #[cached(
     type = "TimedSizedCache<String, Result<bool, String>>",
     create = "{ TimedSizedCache::with_size_and_lifespan_and_refresh(100, 30, true) }",
