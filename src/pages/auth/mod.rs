@@ -12,6 +12,7 @@ pub fn routes(state: AppState) -> Router {
             "/login",
             get(login::login_page_handler).post(login::login_handler),
         )
+        .layer(middleware::from_fn(layer::check_auth))
         .route(
             "/sign-up",
             get(signup::signup_page_handler).post(signup::signup_handler),

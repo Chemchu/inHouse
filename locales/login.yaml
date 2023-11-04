@@ -43,6 +43,9 @@ send_recover_email:
 signup_email_sent:
   es_ES: Se ha enviado un correo de confirmación a tu dirección de correo electrónico.
   en_US: A confirmation email has been sent to your email address.
+login_failed:
+  es_ES: Usuario o contraseña incorrectos.
+  en_US: Wrong username or password.
 signup_completed:
   es_ES: Registro completado.
   en_US: Registration completed.
@@ -55,3 +58,6 @@ signup_server_error:
 try_again_later:
   es_ES: Por favor, inténtalo de nuevo más tarde.
   en_US: Please, try again later.
+try_again:
+  es_ES: Inténtalo de nuevo.
+  en_US: Please, try again.

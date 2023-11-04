@@ -1,1 +1,1 @@
-pub mod sign_up_message;
+pub mod auth;

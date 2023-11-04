@@ -8,7 +8,10 @@ use axum::{
 use reqwest::{header, Error, Response};
 use serde::{Deserialize, Serialize};
 
-use crate::{domain::AppState, localization::Translator};
+use crate::{
+    components::auth::login_failed_message::LoginFailedMessageTemplate, domain::AppState,
+    localization::Translator,
+};
 
 #[derive(Template)]
 #[template(path = "auth/login/login.html")]
@@ -57,7 +60,7 @@ struct LoginResponse {
 }
 
 impl LoginResponse {
-    fn cookies(&self) -> HeaderMap {
+    fn headers(&self) -> HeaderMap {
         let mut header_map = HeaderMap::new();
 
         header_map.insert(
@@ -96,13 +99,17 @@ pub async fn login_handler(
                 tracing::info!("Supabase login successful: {:?}", body);
 
                 let login_response: LoginResponse = serde_json::from_str(&body).unwrap();
-                (StatusCode::OK, login_response.cookies().into_response())
+                let mut headers = login_response.headers();
+                headers.insert("HX-Redirect", "/dashboard".parse().unwrap());
+                (StatusCode::OK, headers.into_response())
             } else {
                 tracing::info!("Supabase login failed: {:?}", response);
-                (
-                    StatusCode::UNAUTHORIZED,
-                    Html("Error al iniciar sesión").into_response(),
-                )
+                let template = LoginFailedMessageTemplate {
+                    translator: state.translator.clone(),
+                };
+                let reply_html = askama::Template::render(&template).unwrap();
+
+                (StatusCode::OK, Html(reply_html).into_response())
             }
         }
         Err(response) => {

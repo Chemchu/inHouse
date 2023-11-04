@@ -14,11 +14,12 @@ use tracing::Level;
 #[tokio::main]
 async fn main() {
     dotenv::dotenv().ok();
-    dotenv::from_filename(format!(".env.{}", std::env::var("ENVIRONMENT").unwrap())).ok();
+    let environment =
+        std::env::var("ENVIRONMENT").expect("ENVIRONMENT environment variable not found!");
+    dotenv::from_filename(format!(".env.{}", environment)).ok();
 
     tracing_subscriber::fmt().with_target(false).pretty().init();
 
-    // TODO: add when you are using DB connections
     let db = database::connect_to_db().await.unwrap();
     let translator = localization::Translator::new("es_ES".to_string(), "locales");
 
@@ -27,13 +28,14 @@ async fn main() {
             .expect("SUPABASE_API_KEY environment variable not found!"),
         supabase_url: std::env::var("SUPABASE_URL")
             .expect("SUPABASE_URL environment variable not found!"),
-        conn: db,
+        conn: std::sync::Arc::from(db),
         translator,
     };
 
     let app = Router::new()
         .route("/", get(pages::home::home_page_handler))
-        .merge(pages::auth::routes(state))
+        .merge(pages::auth::routes(state.clone()))
+        .merge(pages::dashboard::routes(state.clone()))
         .route(
             "/internal-error",
             get(pages::generic::internal_error::internal_error_page_handler),
@@ -46,10 +48,12 @@ async fn main() {
         )
         .merge(pages::assets::routes());
 
-    let addr_str = "127.0.0.1:3000";
+    let port = std::env::var("PORT").expect("PORT environment variable not found!");
+
+    let addr_str = format!("127.0.0.1:{}", port);
     let addr = addr_str.parse::<SocketAddr>().unwrap();
 
-    tracing::info!("Application started! Serving on {} 🚀", addr);
+    tracing::info!("Application started 🚀! Serving on http://{}/", addr);
 
     axum::Server::bind(&addr)
         .serve(app.into_make_service())

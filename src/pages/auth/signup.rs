@@ -1,5 +1,5 @@
 use crate::{
-    components::sign_up_message::{
+    components::auth::sign_up_message::{
         SignUpFailMessage, SignUpServerErrorMessage, SignUpSuccessMessage,
     },
     domain::AppState,

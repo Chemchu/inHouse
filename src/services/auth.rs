@@ -12,9 +12,10 @@ use crate::domain::entity::users::{self, Entity as User};
     sync_writes = true
 )]
 pub async fn exists_by_email(state: &domain::AppState, email: &str) -> Result<bool, String> {
+    let db_connection = std::sync::Arc::as_ref(&state.conn);
     let user = User::find()
         .filter(users::Column::Email.contains(email))
-        .one(&state.conn)
+        .one(db_connection)
         .await;
 
     match user {

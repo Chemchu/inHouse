@@ -6,6 +6,6 @@ pub mod entity;
 pub struct AppState {
     pub supabase_url: String,
     pub supabase_api_key: String,
-    pub conn: sea_orm::DatabaseConnection,
+    pub conn: std::sync::Arc<sea_orm::DatabaseConnection>,
     pub translator: Translator,
 }
