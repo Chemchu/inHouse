@@ -78,18 +78,9 @@ impl LoginResponse {
 }
 
 pub async fn login_handler(
-    headers: HeaderMap,
     State(state): State<AppState>,
     Form(payload): Form<LoginForm>,
 ) -> impl IntoResponse {
-    if headers.contains_key(header::AUTHORIZATION) {
-        tracing::debug!("User already logged in");
-        return (
-            StatusCode::FOUND,
-            [(header::LOCATION, "/dashboard")].into_response(),
-        );
-    }
-
     match login(&state, &payload.email, &payload.password).await {
         Ok(response) => {
             let status = response.status();
