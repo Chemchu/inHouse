@@ -2,17 +2,17 @@ use axum::{
     extract::State,
     http::{HeaderMap, Request},
     middleware::Next,
-    response::Response,
+    response::{IntoResponse, Response},
 };
-use reqwest::StatusCode;
+use reqwest::{header, StatusCode};
 
 use crate::domain::AppState;
 
-pub async fn inject_localization<A>(
+pub async fn inject_localization<B>(
     State(state): State<AppState>,
     headers: HeaderMap,
-    request: Request<A>,
-    next: Next<A>,
+    request: Request<B>,
+    next: Next<B>,
 ) -> Response {
     let mut translator = state.translator.clone();
 
@@ -22,43 +22,43 @@ pub async fn inject_localization<A>(
     next.run(request).await
 }
 
-pub async fn check_auth<A>(headers: HeaderMap, request: Request<A>, next: Next<A>) -> Response {
+pub async fn check_auth<B>(
+    headers: HeaderMap,
+    request: Request<B>,
+    next: Next<B>,
+) -> Result<Response, impl IntoResponse> {
     match headers.get("cookie") {
         Some(cookies) => {
             tracing::info!(
                 "User already logged in. Cookies: {}",
                 cookies.to_str().unwrap()
             );
+            tracing::info!("Redirecting to /dashboard...");
 
-            let mut req = request;
-
-            req.headers_mut()
-                .insert("HX-Redirect", "/dashboard".parse().unwrap());
-
-            next.run(req).await
+            Err(Response::builder()
+                .header(header::LOCATION, "/dashboard")
+                .status(StatusCode::SEE_OTHER)
+                .body(http_body::Empty::new())
+                .unwrap())
         }
-        None => {
-            tracing::info!("User not logged in!");
-            next.run(request).await
-        }
+        None => Ok(next.run(request).await),
     }
 }
 
-pub async fn check_logged_user<A>(
+pub async fn check_logged_user<B>(
     headers: HeaderMap,
-    request: Request<A>,
-    next: Next<A>,
-) -> Result<Response, StatusCode> {
+    request: Request<B>,
+    next: Next<B>,
+) -> Result<Response, impl IntoResponse> {
     match headers.get("cookie") {
-        Some(cookies) => Ok(next.run(request).await),
+        Some(_) => Ok(next.run(request).await),
         None => {
-            tracing::info!("User not logged in!");
-            let mut req = request;
-
-            req.headers_mut()
-                .insert("HX-Redirect", "/login".parse().unwrap());
-
-            Err(StatusCode::UNAUTHORIZED)
+            tracing::info!("User not logged in! Redirecting to /login...");
+            Err(Response::builder()
+                .header(header::LOCATION, "/login")
+                .status(StatusCode::SEE_OTHER)
+                .body(http_body::Empty::new())
+                .unwrap())
         }
     }
 }
