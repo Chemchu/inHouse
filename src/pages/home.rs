@@ -5,7 +5,7 @@ use axum::{
 };
 
 #[derive(Template)]
-#[template(path = "dashboard/home.html")]
+#[template(path = "home.html")]
 struct HomeTemplate;
 
 pub async fn home_page_handler() -> impl IntoResponse {

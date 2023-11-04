@@ -8,13 +8,13 @@ use reqwest::StatusCode;
 use crate::{domain::AppState, localization::Translator};
 
 #[derive(Template)]
-#[template(path = "dashboard/home.html")]
-struct LoginTemplate {
+#[template(path = "dashboard/index.html")]
+struct DashboardTemplate {
     translator: Translator,
 }
 
 pub async fn dashboard_page_handler(State(state): State<AppState>) -> impl IntoResponse {
-    let template = LoginTemplate {
+    let template = DashboardTemplate {
         translator: state.translator.clone(),
     };
 
