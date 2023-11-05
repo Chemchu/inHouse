@@ -39,7 +39,14 @@ content %}
           </button>
 
           <!-- Profile dropdown -->
-          <div class="relative ml-4 flex-shrink-0">
+          <div
+            class="relative ml-4 flex-shrink-0"
+            _="on click from elsewhere 
+              if #user-menu do not match .hidden 
+                transition #user-menu's opacity to 0 over 150ms
+                toggle .hidden on #user-menu
+              end"
+          >
             <div>
               <button
                 type="button"
