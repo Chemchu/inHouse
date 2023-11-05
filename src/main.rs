@@ -34,6 +34,7 @@ async fn main() {
 
     let app = Router::new()
         .route("/", get(pages::home::home_page_handler))
+        .with_state(state.clone())
         .merge(pages::auth::routes(state.clone()))
         .merge(pages::dashboard::routes(state.clone()))
         .route(
