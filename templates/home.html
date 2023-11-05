@@ -16,6 +16,7 @@ content %}
         <button
           type="button"
           class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
+          _="on click toggle .hidden on #mobile-sidebar then transition #mobile-sidebar's opacity to 1 then settle"
         >
           <span class="sr-only">Open main menu</span>
           <svg
@@ -46,7 +47,12 @@ content %}
       </div>
     </nav>
     <!-- Mobile menu, show/hide based on menu open state. -->
-    <div id="mobile-menu" class="lg:hidden" role="dialog" aria-modal="true">
+    <div
+      id="mobile-sidebar"
+      class="hidden opacity-0"
+      role="dialog"
+      aria-modal="true"
+    >
       <!-- Background backdrop, show/hide based on slide-over state. -->
       <div class="fixed inset-0 z-50"></div>
       <div
@@ -60,7 +66,8 @@ content %}
           <button
             type="button"
             class="-m-2.5 rounded-md p-2.5"
-            _="on click toggle .text-red-500 on me"
+            _="on click transition #mobile-sidebar's opacity to 0 
+            then settle then toggle .hidden on #mobile-sidebar"
           >
             <span class="sr-only">Close menu</span>
             <svg
