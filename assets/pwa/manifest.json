@@ -49,20 +49,20 @@
         "resource-management"
     ],
     "screenshots": [{
-        "src": "screenshots/screenshot-1.png",
+        "src": "pwa/screenshots/screenshot-1.png",
         "sizes": "851x621",
         "type": "image/png",
         "form_factor": "wide",
         "label": "Login Screen"
     },
     {
-        "src": "screenshots/screenshot-2.png",
+        "src": "pwa/screenshots/screenshot-2.png",
         "sizes": "543x643",
         "type": "image/png",
         "form_factor": "narrow",
         "label": "Login Screen"
     }],
-    "start_url": "../../templates/base.html",
+    "start_url": "/",
     "display": "fullscreen",
     "theme_color": "#0284c7",
     "background_color": "#0284c7"

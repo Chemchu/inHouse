@@ -5,9 +5,16 @@ use axum::{
     routing::get,
     Router,
 };
+use tower_http::services::ServeDir;
 
 pub fn routes() -> Router {
-    Router::new().route("/_assets/*path", get(assets_handler))
+    Router::new()
+        .route("/_assets/*path", get(assets_handler))
+        .nest_service("/_assets/icons", ServeDir::new("assets/icons"))
+        .nest_service(
+            "/_assets/pwa/screenshots",
+            ServeDir::new("assets/pwa/screenshots"),
+        )
 }
 
 static STYLE_CSS: &str = include_str!("../../../assets/style.css");
