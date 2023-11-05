@@ -15,6 +15,7 @@ static FAVICON: &str = include_str!("../../../assets/favicon.svg");
 static HTMX: &str = include_str!("../../../assets/htmx.min.js");
 static HYPERSCRIPT: &str = include_str!("../../../assets/hyperscript.min.js");
 static LOADER: &str = include_str!("../../../assets/loader.svg");
+static MANIFEST: &str = include_str!("../../../assets/pwa/manifest.json");
 static NONE: &str = "";
 
 async fn assets_handler(Path(path): Path<String>) -> impl IntoResponse {
@@ -40,6 +41,10 @@ async fn assets_handler(Path(path): Path<String>) -> impl IntoResponse {
         "loader.svg" => {
             headers.insert(header::CONTENT_TYPE, "image/svg+xml".parse().unwrap());
             (StatusCode::OK, headers, LOADER)
+        }
+        "manifest.json" => {
+            headers.insert(header::CONTENT_TYPE, "application/json".parse().unwrap());
+            (StatusCode::OK, headers, MANIFEST)
         }
         _ => {
             headers.insert(header::CONTENT_TYPE, "text/plain".parse().unwrap());
