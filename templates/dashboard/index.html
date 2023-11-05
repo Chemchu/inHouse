@@ -51,6 +51,14 @@ content %}
                 id="user-menu-button"
                 aria-expanded="false"
                 aria-haspopup="true"
+                _="on click 
+                  if #user-menu match .hidden
+                    toggle .hidden on #user-menu
+                    transition #user-menu's opacity to 1 over 150ms
+                  else 
+                    transition #user-menu's opacity to 0 over 150ms
+                    toggle .hidden on #user-menu
+                  end"
               >
                 <span class="absolute -inset-1.5"></span>
                 <span class="sr-only">Open user menu</span>
@@ -73,7 +81,8 @@ content %}
                 To: "transform opacity-0 scale-95"
             -->
             <div
-              class="absolute -right-2 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+              id="user-menu"
+              class="hidden opacity-0 absolute -right-2 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
               role="menu"
               aria-orientation="vertical"
               aria-labelledby="user-menu-button"

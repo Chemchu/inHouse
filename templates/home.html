@@ -16,7 +16,8 @@ content %}
         <button
           type="button"
           class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
-          _="on click toggle .hidden on #mobile-sidebar then transition #mobile-sidebar's opacity to 1 then settle"
+          _="on click toggle .hidden on #mobile-sidebar 
+          then transition #mobile-sidebar's opacity to 1 over 150ms"
         >
           <span class="sr-only">Open main menu</span>
           <svg
@@ -66,8 +67,8 @@ content %}
           <button
             type="button"
             class="-m-2.5 rounded-md p-2.5"
-            _="on click transition #mobile-sidebar's opacity to 0 
-            then settle then toggle .hidden on #mobile-sidebar"
+            _="on click transition #mobile-sidebar's opacity to 0 over 150ms 
+            then toggle .hidden on #mobile-sidebar"
           >
             <span class="sr-only">Close menu</span>
             <svg
@@ -87,7 +88,7 @@ content %}
           </button>
         </div>
         <div class="mt-6 flow-root">
-          <div class="space-y-2">
+          <div class="space-y-2" hx-swap="innerHTML transition:true">
             <a
               href="/login"
               class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
