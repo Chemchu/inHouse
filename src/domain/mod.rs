@@ -1,8 +1,5 @@
-use axum::{
-    async_trait,
-    extract::FromRequestParts,
-    http::{request::Parts, HeaderValue},
-};
+use axum::{async_trait, extract::FromRequestParts, http::request::Parts};
+use jsonwebtoken::decode_header;
 use reqwest::{header::COOKIE, StatusCode};
 use serde::{Deserialize, Serialize};
 
@@ -18,7 +15,7 @@ pub struct AppState {
     pub translator: Translator,
 }
 
-pub struct Token(pub HeaderValue);
+pub struct Token(pub Claims);
 
 #[async_trait]
 impl<S> FromRequestParts<S> for Token
@@ -28,8 +25,34 @@ where
     type Rejection = (StatusCode, &'static str);
 
     async fn from_request_parts(parts: &mut Parts, _: &S) -> Result<Self, Self::Rejection> {
-        if let Some(user) = parts.headers.get(COOKIE) {
-            Ok(Token(user.clone()))
+        if let Some(jwt) = parts.headers.get(COOKIE) {
+            let header = decode_header(jwt.to_str().unwrap());
+            tracing::info!("Header: {:?}", header);
+
+            // TODO: parse JWT into Claims
+            // let token_data = match decode::<Claims>(
+            //     &token,
+            //     &DecodingKey::from_secret(key),
+            //     &Validation::new(Algorithm::HS512),
+            // )
+
+            Ok(Token(Claims {
+                aud: String::from(""),
+                exp: 0,
+                iat: 0,
+                sub: String::from(""),
+                email: String::from(""),
+                phone: String::from(""),
+                app_metadata: AppMetadata {
+                    provider: String::from(""),
+                    providers: vec![],
+                },
+                user_metadata: UserMetadata {},
+                role: String::from(""),
+                aal: String::from(""),
+                amr: vec![],
+                session_id: String::from(""),
+            }))
         } else {
             Err((StatusCode::UNAUTHORIZED, "Unauthorized"))
         }

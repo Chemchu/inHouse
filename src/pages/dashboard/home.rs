@@ -27,7 +27,7 @@ pub async fn dashboard_home_page_handler(
         current_year: chrono::Utc::now().year(),
     };
 
-    tracing::info!("User logged in. Token: {}", sb_token.to_str().unwrap());
+    tracing::info!("User logged in. Token: {}", sb_token.aud);
 
     let reply_html = askama::Template::render(&template).unwrap();
 
