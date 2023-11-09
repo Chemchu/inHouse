@@ -28,7 +28,7 @@ async fn main() {
             .expect("SUPABASE_API_KEY environment variable not found!"),
         supabase_url: std::env::var("SUPABASE_URL")
             .expect("SUPABASE_URL environment variable not found!"),
-        conn: std::sync::Arc::from(db),
+        conn: db,
         translator,
     };
 

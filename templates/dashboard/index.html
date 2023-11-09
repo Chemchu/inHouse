@@ -21,7 +21,9 @@ content %}
             class="relative flex-shrink-0 rounded-full p-1 text-indigo-200 hover:bg-white hover:bg-opacity-10 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
           >
             <span class="absolute -inset-1.5"></span>
-            <span class="sr-only">View notifications</span>
+            <span class="sr-only"
+              >{{ translator.translate("view_notifications") }}</span
+            >
             <svg
               class="h-6 w-6"
               fill="none"
@@ -98,7 +100,7 @@ content %}
                 role="menuitem"
                 tabindex="-1"
                 id="user-menu-item-0"
-                >Your Profile</a
+                >{{ translator.translate("your_profile") }}</a
               >
               <!-- Active: "bg-gray-100", Not Active: "" -->
               <a
@@ -107,7 +109,7 @@ content %}
                 role="menuitem"
                 tabindex="-1"
                 id="user-menu-item-1"
-                >Settings</a
+                >{{ translator.translate("settings") }}</a
               >
               <!-- Active: "bg-gray-100", Not Active: "" -->
               <a
@@ -116,7 +118,7 @@ content %}
                 role="menuitem"
                 tabindex="-1"
                 id="user-menu-item-2"
-                >Sign out</a
+                >{{ translator.translate("sign_out") }}</a
               >
             </div>
           </div>
@@ -125,7 +127,9 @@ content %}
         <!-- Search -->
         <div class="min-w-0 flex-1 px-12 lg:hidden">
           <div class="mx-auto w-full max-w-xs">
-            <label for="desktop-search" class="sr-only">Search</label>
+            <label for="desktop-search" class="sr-only"
+              >{{ translator.translate("search") }}</label
+            >
             <div class="relative text-white focus-within:text-gray-600">
               <div
                 class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
@@ -163,7 +167,9 @@ content %}
             aria-expanded="false"
           >
             <span class="absolute -inset-0.5"></span>
-            <span class="sr-only">Open main menu</span>
+            <span class="sr-only"
+              >{{ translator.translate("open_main_menu") }}</span
+            >
             <!-- Menu open: "hidden", Menu closed: "block" -->
             <svg
               class="block h-6 w-6"
@@ -206,17 +212,18 @@ content %}
                 href="#"
                 class="text-white rounded-md bg-white bg-opacity-0 px-3 py-2 text-sm font-medium hover:bg-opacity-10"
                 aria-current="page"
-                >Home</a
+                >{{ translator.translate("home") }}</a
               >
               <a
                 href="#"
                 class="text-indigo-100 rounded-md bg-white bg-opacity-0 px-3 py-2 text-sm font-medium hover:bg-opacity-10"
-                >Profile</a
+              >
+                {{ translator.translate("profile") }}</a
               >
               <a
                 href="#"
                 class="text-indigo-100 rounded-md bg-white bg-opacity-0 px-3 py-2 text-sm font-medium hover:bg-opacity-10"
-                >Resources</a
+                >{{ translator.translate("resources") }}</a
               >
               <a
                 href="#"
@@ -232,7 +239,9 @@ content %}
           </div>
           <div>
             <div class="mx-auto w-full max-w-md">
-              <label for="mobile-search" class="sr-only">Search</label>
+              <label for="mobile-search" class="sr-only"
+                >{{ translator.translate("search") }}</label
+              >
               <div class="relative text-white focus-within:text-gray-600">
                 <div
                   class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3"
@@ -312,7 +321,9 @@ content %}
                   class="relative inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
                 >
                   <span class="absolute -inset-0.5"></span>
-                  <span class="sr-only">Close menu</span>
+                  <span class="sr-only"
+                    >{ translator.translate("close_menu") }</span
+                  >
                   <svg
                     class="h-6 w-6"
                     fill="none"
@@ -334,17 +345,17 @@ content %}
               <a
                 href="#"
                 class="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-gray-800"
-                >Home</a
+                >{{ translator.translate("home") }}</a
               >
               <a
                 href="#"
                 class="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-gray-800"
-                >Profile</a
+                >{{ translator.translate("profile") }}</a
               >
               <a
                 href="#"
                 class="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-gray-800"
-                >Resources</a
+                >{{ translator.translate("resources") }}</a
               >
               <a
                 href="#"
@@ -455,7 +466,9 @@ content %}
       <div
         class="border-t border-gray-200 py-8 text-center text-sm text-gray-500 sm:text-left"
       >
-        <span class="block sm:inline">&copy; 2021 Your Company, Inc.</span>
+        <span class="block sm:inline"
+          >&copy; {{ current_year }} InHouse, Inc.</span
+        >
         <span class="block sm:inline">All rights reserved.</span>
       </div>
     </div>

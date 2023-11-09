@@ -61,3 +61,33 @@ try_again_later:
 try_again:
   es_ES: Inténtalo de nuevo.
   en_US: Please, try again.
+view_notifications:
+  es_ES: Ver notificaciones
+  en_US: View notifications
+your_profile:
+  es_ES: Tu perfil
+  en_US: Your profile
+settings:
+  es_ES: Ajustes
+  en_US: Settings
+sign_out:
+  es_ES: Cerrar sesión
+  en_US: Sign out
+search:
+  es_ES: Buscar
+  en_US: Search
+open_main_menu:
+  es_ES: Abrir menú principal
+  en_US: Open main menu
+home:
+  es_ES: Inicio
+  en_US: Home
+profile:
+  es_ES: Perfil
+  en_US: Profile
+resources:
+  es_ES: Recursos
+  en_US: Resources
+close_menu:
+  es_ES: Cerrar menú
+  en_US: Close menu
