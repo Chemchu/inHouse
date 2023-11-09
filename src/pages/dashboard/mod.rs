@@ -2,13 +2,13 @@ use axum::{middleware, routing::get, Router};
 
 use crate::{domain::AppState, layer};
 
-use self::dashboard::dashboard_page_handler;
+use self::home::dashboard_home_page_handler;
 
-pub mod dashboard;
+pub mod home;
 
 pub fn routes(state: AppState) -> Router {
     Router::new()
-        .route("/dashboard", get(dashboard_page_handler))
+        .route("/dashboard", get(dashboard_home_page_handler))
         .layer(middleware::from_fn(layer::check_logged_user))
         .layer(middleware::from_fn_with_state(
             state.clone(),

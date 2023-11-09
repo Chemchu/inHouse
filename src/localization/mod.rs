@@ -22,7 +22,7 @@ pub struct Translator {
     pub translations: HashMap<TranslationKey, TranslationValue>,
 }
 
-static DEFAULT_LOCALE: &'static str = "en_US";
+static DEFAULT_LOCALE: &str = "en_US";
 
 impl Translator {
     pub fn new(locale: String, locale_path: &'static str) -> Self {
@@ -42,7 +42,7 @@ impl Translator {
 
         self.translations
             .get(&translate_key)
-            .expect(format!("Translation not found for key: {}", key).as_str())
+            .unwrap_or_else(|| panic!("Translation not found for key: {}", key))
             .value
             .clone()
     }
@@ -62,7 +62,7 @@ impl Translator {
     }
 }
 
-fn init_translator<'a>(locale_path: &'a str) -> HashMap<TranslationKey, TranslationValue> {
+fn init_translator(locale_path: &str) -> HashMap<TranslationKey, TranslationValue> {
     // Create a HashMap to store your key-value pairs as (String, String) tuples
     let mut key_value_map: HashMap<TranslationKey, TranslationValue> = HashMap::new();
 
@@ -72,7 +72,7 @@ fn init_translator<'a>(locale_path: &'a str) -> HashMap<TranslationKey, Translat
             let file_path = entry.path();
 
             // Open the file and read its contents
-            let mut file = match File::open(&file_path) {
+            let mut file = match File::open(file_path) {
                 Ok(file) => file,
                 Err(_) => {
                     eprintln!("Failed to open file: {}", file_path.display());
@@ -81,7 +81,7 @@ fn init_translator<'a>(locale_path: &'a str) -> HashMap<TranslationKey, Translat
             };
 
             let mut yml = String::new();
-            if let Err(_) = file.read_to_string(&mut yml) {
+            if file.read_to_string(&mut yml).is_err() {
                 eprintln!("Failed to read file: {}", file_path.display());
                 continue;
             }
@@ -103,7 +103,7 @@ fn init_translator<'a>(locale_path: &'a str) -> HashMap<TranslationKey, Translat
                         TranslationKey {
                             key: (key.clone(), lang.clone()),
                         },
-                        TranslationValue { value: value },
+                        TranslationValue { value },
                     );
                 }
             }
@@ -126,10 +126,8 @@ pub fn get_locale_from_headers(headers: &HeaderMap, defined_locales: Vec<String>
             let a = a.split('-').collect::<Vec<&str>>();
             let b = b.split('-').collect::<Vec<&str>>();
 
-            if a.len() == 2 && b.len() == 2 {
-                if a[0] == b[0] {
-                    return a[1].cmp(&b[1]);
-                }
+            if a.len() == 2 && b.len() == 2 && a[0] == b[0] {
+                return a[1].cmp(b[1]);
             }
 
             a.len().cmp(&b.len())

@@ -9,12 +9,12 @@ use crate::{domain::AppState, localization::Translator};
 
 #[derive(Template)]
 #[template(path = "dashboard/index.html")]
-struct DashboardTemplate {
+struct DashboardHomeTemplate {
     translator: Translator,
 }
 
-pub async fn dashboard_page_handler(State(state): State<AppState>) -> impl IntoResponse {
-    let template = DashboardTemplate {
+pub async fn dashboard_home_page_handler(State(state): State<AppState>) -> impl IntoResponse {
+    let template = DashboardHomeTemplate {
         translator: state.translator.clone(),
     };
 
