@@ -91,3 +91,30 @@ resources:
 close_menu:
   es_ES: Cerrar menú
   en_US: Close menu
+username:
+  es_ES: Nombre de usuario
+  en_US: Username
+name:
+  es_ES: Nombre
+  en_US: Name
+surname:
+  es_ES: Apellidos
+  en_US: Surname
+i_have_read_and_agreed:
+  es_ES: He leído y acepto los
+  en_US: I have read and agreed to the
+terms_and_conditions:
+  es_ES: términos y condiciones
+  en_US: terms and conditions
+page_not_found:
+  es_ES: Página no encontrada
+  en_US: Page not found
+page_not_found_message:
+  es_ES: Lo sentimos, no pudimos encontrar lo que buscas.
+  en_US: We're sorry, we couldn't find what you're looking for.
+go_back:
+  es_ES: Volver
+  en_US: Go back
+get_in_contact_with_us:
+  es_ES: Ponte en contacto con nosotros
+  en_US: Get in contact with us

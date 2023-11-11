@@ -1,5 +1,5 @@
 use axum::{async_trait, extract::FromRequestParts, http::request::Parts};
-use jsonwebtoken::decode_header;
+use jsonwebtoken::{decode, Algorithm, DecodingKey, Validation};
 use reqwest::{header::COOKIE, StatusCode};
 use serde::{Deserialize, Serialize};
 
@@ -25,34 +25,24 @@ where
     type Rejection = (StatusCode, &'static str);
 
     async fn from_request_parts(parts: &mut Parts, _: &S) -> Result<Self, Self::Rejection> {
+        let jwt_key =
+            std::env::var("JWT_SECRET").expect("JWT_SECRET environment variable not found!");
+
         if let Some(jwt) = parts.headers.get(COOKIE) {
-            let header = decode_header(jwt.to_str().unwrap());
-            tracing::info!("Header: {:?}", header);
+            let mut validator = Validation::new(Algorithm::HS256);
+            validator.set_audience(&["authenticated"]);
 
-            // TODO: parse JWT into Claims
-            // let token_data = match decode::<Claims>(
-            //     &token,
-            //     &DecodingKey::from_secret(key),
-            //     &Validation::new(Algorithm::HS512),
-            // )
+            let claims = decode::<Claims>(
+                jwt.to_str().unwrap().split('=').last().unwrap(),
+                &DecodingKey::from_secret(jwt_key.clone().as_ref()),
+                &validator,
+            );
+            if claims.is_err() {
+                tracing::error!("Error decoding header: {:?}", claims.err().unwrap());
+                return Err((StatusCode::UNAUTHORIZED, "Unauthorized"));
+            }
 
-            Ok(Token(Claims {
-                aud: String::from(""),
-                exp: 0,
-                iat: 0,
-                sub: String::from(""),
-                email: String::from(""),
-                phone: String::from(""),
-                app_metadata: AppMetadata {
-                    provider: String::from(""),
-                    providers: vec![],
-                },
-                user_metadata: UserMetadata {},
-                role: String::from(""),
-                aal: String::from(""),
-                amr: vec![],
-                session_id: String::from(""),
-            }))
+            Ok(Token(claims.unwrap().claims))
         } else {
             Err((StatusCode::UNAUTHORIZED, "Unauthorized"))
         }

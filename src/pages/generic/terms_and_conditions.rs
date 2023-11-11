@@ -8,13 +8,13 @@ use axum::{
 use crate::domain::AppState;
 
 #[derive(Template)]
-#[template(path = "generic/not_found.html")]
-struct NotFoundTemplate {
+#[template(path = "generic/terms_and_conditions.html")]
+struct TermsAndConditionsTemplate {
     translator: crate::localization::Translator,
 }
 
-pub async fn not_found_page_handler(State(state): State<AppState>) -> impl IntoResponse {
-    let template = NotFoundTemplate {
+pub async fn terms_and_conditions_page_handler(State(state): State<AppState>) -> impl IntoResponse {
+    let template = TermsAndConditionsTemplate {
         translator: state.translator.clone(),
     };
     let reply_html = askama::Template::render(&template).unwrap();

@@ -24,7 +24,12 @@ content %}
 -->
 <div>
   <!-- Off-canvas menu for mobile, show/hide based on off-canvas menu state. -->
-  <div class="relative z-50 lg:hidden" role="dialog" aria-modal="true">
+  <div
+    id="mobile-sidebar-menu"
+    class="hidden opacity-0 relative z-50 lg:hidden"
+    role="dialog"
+    aria-modal="true"
+  >
     <!--
       Off-canvas menu backdrop, show/hide based on off-canvas menu state.
 
@@ -60,7 +65,18 @@ content %}
             To: "opacity-0"
         -->
         <div class="absolute left-full top-0 flex w-16 justify-center pt-5">
-          <button type="button" class="-m-2.5 p-2.5">
+          <button
+            type="button"
+            class="-m-2.5 p-2.5"
+            _="on click 
+            if #mobile-sidebar-menu match .hidden
+              toggle .hidden on #mobile-sidebar-menu
+              transition #mobile-sidebar-menu's opacity to 1 over 150ms
+            else 
+              transition #mobile-sidebar-menu's opacity to 0 over 150ms
+              toggle .hidden on #mobile-sidebar-menu
+            end"
+          >
             <span class="sr-only">Close sidebar</span>
             <svg
               class="h-6 w-6 text-white"
@@ -550,7 +566,18 @@ content %}
       <div
         class="flex h-16 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-0 lg:shadow-none"
       >
-        <button type="button" class="-m-2.5 p-2.5 text-gray-700 lg:hidden">
+        <button
+          type="button"
+          class="-m-2.5 p-2.5 text-gray-700 lg:hidden"
+          _="on click 
+            if #mobile-sidebar-menu match .hidden
+              toggle .hidden on #mobile-sidebar-menu
+              transition #mobile-sidebar-menu's opacity to 1 over 150ms
+            else 
+              transition #mobile-sidebar-menu's opacity to 0 over 150ms
+              toggle .hidden on #mobile-sidebar-menu
+            end"
+        >
           <span class="sr-only">Open sidebar</span>
           <svg
             class="h-6 w-6"
@@ -623,14 +650,28 @@ content %}
             ></div>
 
             <!-- Profile dropdown -->
-            <div class="relative">
+            <div
+              class="relative"
+              _="on click from elsewhere 
+                if #user-menu do not match .hidden 
+                  transition #user-menu's opacity to 0 over 150ms
+                  toggle .hidden on #user-menu
+                end"
+            >
               <button
                 type="button"
                 class="-m-1.5 flex items-center p-1.5"
                 id="user-menu-button"
                 aria-expanded="false"
                 aria-haspopup="true"
-                _="on click toggle .hidden on #user-menu"
+                _="on click 
+                  if #user-menu match .hidden
+                    toggle .hidden on #user-menu
+                    transition #user-menu's opacity to 1 over 150ms
+                  else 
+                    transition #user-menu's opacity to 0 over 150ms
+                    toggle .hidden on #user-menu
+                  end"
               >
                 <span class="sr-only">Open user menu</span>
                 <img
@@ -642,7 +683,7 @@ content %}
                   <span
                     class="ml-4 text-sm font-semibold leading-6 text-gray-900"
                     aria-hidden="true"
-                    >Tom Cook</span
+                    >{{ email }}</span
                   >
                   <svg
                     class="ml-2 h-5 w-5 text-gray-400"
@@ -670,12 +711,13 @@ content %}
                   To: "transform opacity-0 scale-95"
               -->
               <div
-                class="hidden absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none"
+                class="hidden opacity-0 absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none"
                 id="user-menu"
                 role="menu"
                 aria-orientation="vertical"
                 aria-labelledby="user-menu-button"
                 tabindex="-1"
+                hx-swap="innerHTML transition:true"
               >
                 <!-- Active: "bg-gray-50", Not Active: "" -->
                 <a

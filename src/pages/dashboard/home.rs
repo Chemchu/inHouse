@@ -16,18 +16,18 @@ use crate::{
 struct DashboardHomeTemplate {
     translator: Translator,
     current_year: i32,
+    email: String,
 }
 
 pub async fn dashboard_home_page_handler(
     State(state): State<AppState>,
-    Token(sb_token): Token,
+    Token(claims): Token,
 ) -> impl IntoResponse {
     let template = DashboardHomeTemplate {
         translator: state.translator.clone(),
         current_year: chrono::Utc::now().year(),
+        email: claims.email,
     };
-
-    tracing::info!("User logged in. Token: {}", sb_token.aud);
 
     let reply_html = askama::Template::render(&template).unwrap();
 

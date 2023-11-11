@@ -27,6 +27,43 @@
       hx-target="#signup-form"
       hx-indicator="#indicator"
     >
+      <div class="flex flex-row gap-1">
+        <div>
+          <div class="flex items-center justify-between">
+            <label
+              for="password"
+              class="block text-sm font-medium leading-6 text-gray-900"
+              >{{ translator.translate("name") }}</label
+            >
+          </div>
+          <div class="mt-2">
+            <input
+              id="name"
+              name="name"
+              required
+              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between">
+            <label
+              for="retry-password"
+              class="block text-sm font-medium leading-6 text-gray-900"
+              >{{ translator.translate("surname") }}
+            </label>
+          </div>
+          <div class="mt-2">
+            <input
+              id="surname"
+              name="surname"
+              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+      </div>
+
       <div>
         <label
           for="email"
@@ -99,6 +136,35 @@
             <img class="htmx-indicator" src="/_assets/loader.svg" />
           </div>
         </button>
+      </div>
+
+      <!-- Accept conditions -->
+      <div class="relative flex items-center justify-center">
+        <div class="flex h-6 items-center">
+          <input
+            id="conditions"
+            aria-describedby="conditions"
+            name="conditions"
+            type="checkbox"
+            required
+            class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+          />
+        </div>
+        <div class="ml-3 text-sm leading-6">
+          <label for="comments" class="font-medium text-gray-500"
+            >{{ translator.translate("i_have_read_and_agreed") }}</label
+          >
+          <a
+            href="/terms-and-conditions"
+            target="_blank"
+            rel="noopener noreferrer"
+            id="comments-description"
+            class="text-gray-900"
+            ><span class="sr-only">
+              {{ translator.translate("i_have_read_and_agreed") }} </span
+            >{{ translator.translate("terms_and_conditions") }}</a
+          >
+        </div>
       </div>
     </form>
 

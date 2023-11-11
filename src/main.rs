@@ -41,7 +41,12 @@ async fn main() {
             "/internal-error",
             get(pages::generic::internal_error::internal_error_page_handler),
         )
-        .fallback_service(get(pages::generic::not_found::not_found_page_handler))
+        .route(
+            "/terms-and-conditions",
+            get(pages::generic::terms_and_conditions::terms_and_conditions_page_handler)
+                .with_state(state.clone()),
+        )
+        .fallback_service(get(pages::generic::not_found::not_found_page_handler).with_state(state))
         .layer(
             TraceLayer::new_for_http()
                 .make_span_with(trace::DefaultMakeSpan::new().level(Level::INFO))
