@@ -118,3 +118,6 @@ go_back:
 get_in_contact_with_us:
   es_ES: Ponte en contacto con nosotros
   en_US: Get in contact with us
+groceries:
+  es_ES: Compras
+  en_US: Groceries
