@@ -121,3 +121,15 @@ get_in_contact_with_us:
 groceries:
   es_ES: Compras
   en_US: Groceries
+signedin_as:
+  es_ES: Conectado como
+  en_US: Signed in as
+sign_out:
+  es_ES: Cerrar sesión
+  en_US: Sign out
+license:
+  es_ES: Licencia
+  en_US: License
+support:
+  es_ES: Soporte
+  en_US: Support

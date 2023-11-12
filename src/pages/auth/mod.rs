@@ -4,6 +4,7 @@ use crate::{domain::AppState, layer};
 
 pub mod login;
 pub mod recover_account;
+pub mod signout;
 pub mod signup;
 
 pub fn routes(state: AppState) -> Router {
@@ -26,4 +27,5 @@ pub fn routes(state: AppState) -> Router {
             layer::inject_localization,
         ))
         .with_state(state)
+        .route("/sign-out", axum::routing::post(signout::signout_handler))
 }
