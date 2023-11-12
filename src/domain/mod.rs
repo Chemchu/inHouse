@@ -72,7 +72,11 @@ pub struct AppMetadata {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
-pub struct UserMetadata {}
+pub struct UserMetadata {
+    pub name: Option<String>,
+    pub surname: Option<String>,
+    pub username: Option<String>,
+}
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Amr {
