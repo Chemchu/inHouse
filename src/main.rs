@@ -1,10 +1,8 @@
+mod api;
 mod components;
 mod database;
 mod domain;
-mod layer;
-mod localization;
-mod pages;
-mod services;
+mod util;
 
 use axum::{routing::get, Router};
 use std::net::SocketAddr;
@@ -21,7 +19,7 @@ async fn main() {
     tracing_subscriber::fmt().with_target(false).pretty().init();
 
     let db = database::connect_to_db().await.unwrap();
-    let translator = localization::Translator::new("es_ES".to_string(), "locales");
+    let translator = util::localization::Translator::new("es_ES".to_string(), "locales");
 
     let state = domain::AppState {
         supabase_api_key: std::env::var("SUPABASE_API_KEY")
@@ -33,26 +31,26 @@ async fn main() {
     };
 
     let app = Router::new()
-        .route("/", get(pages::home::home_page_handler))
+        .route("/", get(api::home::home_page_handler))
         .with_state(state.clone())
-        .merge(pages::auth::routes(state.clone()))
-        .merge(pages::dashboard::routes(state.clone()))
+        .merge(api::auth::routes(state.clone()))
+        .merge(api::dashboard::routes(state.clone()))
         .route(
             "/internal-error",
-            get(pages::generic::internal_error::internal_error_page_handler),
+            get(api::generic::internal_error::internal_error_page_handler),
         )
         .route(
             "/terms-and-conditions",
-            get(pages::generic::terms_and_conditions::terms_and_conditions_page_handler)
+            get(api::generic::terms_and_conditions::terms_and_conditions_page_handler)
                 .with_state(state.clone()),
         )
-        .fallback_service(get(pages::generic::not_found::not_found_page_handler).with_state(state))
+        .fallback_service(get(api::generic::not_found::not_found_page_handler).with_state(state))
         .layer(
             TraceLayer::new_for_http()
                 .make_span_with(trace::DefaultMakeSpan::new().level(Level::INFO))
                 .on_response(trace::DefaultOnResponse::new().level(Level::INFO)),
         )
-        .merge(pages::assets::routes());
+        .merge(api::assets::routes());
 
     let port = std::env::var("PORT").expect("PORT environment variable not found!");
 

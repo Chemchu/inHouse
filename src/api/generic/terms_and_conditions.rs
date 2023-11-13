@@ -10,7 +10,7 @@ use crate::domain::AppState;
 #[derive(Template)]
 #[template(path = "generic/terms_and_conditions.html")]
 struct TermsAndConditionsTemplate {
-    translator: crate::localization::Translator,
+    translator: crate::util::localization::Translator,
 }
 
 pub async fn terms_and_conditions_page_handler(State(state): State<AppState>) -> impl IntoResponse {

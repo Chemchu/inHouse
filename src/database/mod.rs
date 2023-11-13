@@ -2,6 +2,8 @@ use std::time::Duration;
 
 use sea_orm::{ConnectOptions, Database, DatabaseConnection};
 
+pub mod auth;
+
 pub async fn connect_to_db() -> Result<DatabaseConnection, sea_orm::DbErr> {
     let conn_url = std::env::var("DATABASE_URL");
     match &conn_url {

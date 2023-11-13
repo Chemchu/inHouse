@@ -1,9 +1,11 @@
 use axum::{middleware, routing::get, Router};
 
-use crate::{domain::AppState, layer};
+use crate::domain::AppState;
 
 use self::groceries::groceries_page_handler;
 use self::home::dashboard_home_page_handler;
+
+use super::layer;
 
 pub mod groceries;
 pub mod home;

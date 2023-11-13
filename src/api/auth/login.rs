@@ -10,7 +10,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     components::auth::login_failed_message::LoginFailedMessageTemplate, domain::AppState,
-    localization::Translator,
+    util::localization::Translator,
 };
 
 #[derive(Template)]

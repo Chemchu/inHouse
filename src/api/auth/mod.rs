@@ -1,6 +1,8 @@
 use axum::{middleware, routing::get, Router};
 
-use crate::{domain::AppState, layer};
+use crate::domain::AppState;
+
+use super::layer;
 
 pub mod login;
 pub mod recover_account;

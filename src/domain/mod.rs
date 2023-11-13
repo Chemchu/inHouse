@@ -3,7 +3,7 @@ use jsonwebtoken::{decode, Algorithm, DecodingKey, Validation};
 use reqwest::{header::COOKIE, StatusCode};
 use serde::{Deserialize, Serialize};
 
-use crate::localization::Translator;
+use crate::util::localization::Translator;
 
 pub mod entity;
 

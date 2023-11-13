@@ -10,7 +10,7 @@ use crate::domain::AppState;
 #[derive(Template)]
 #[template(path = "auth/login/recover_account.html")]
 struct RecoverAccountTemplate {
-    translator: crate::localization::Translator,
+    translator: crate::util::localization::Translator,
 }
 
 pub async fn recover_account_page_handler(State(state): State<AppState>) -> impl IntoResponse {

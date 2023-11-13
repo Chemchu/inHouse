@@ -2,8 +2,8 @@ use crate::{
     components::auth::sign_up_message::{
         SignUpFailMessage, SignUpServerErrorMessage, SignUpSuccessMessage,
     },
+    database::auth::exists_by_email,
     domain::AppState,
-    services::auth::exists_by_email,
 };
 use askama::Template;
 use axum::{
@@ -24,7 +24,7 @@ pub struct SignUpForm {
 #[derive(Template)]
 #[template(path = "auth/signup/signup.html")]
 struct SignupTemplate {
-    translator: crate::localization::Translator,
+    translator: crate::util::localization::Translator,
 }
 
 pub async fn signup_page_handler(State(state): State<AppState>) -> impl IntoResponse {

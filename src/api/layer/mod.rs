@@ -17,7 +17,7 @@ pub async fn inject_localization<B>(
     let mut translator = state.translator.clone();
 
     translator.locale =
-        crate::localization::get_locale_from_headers(&headers, translator.languages.clone());
+        crate::util::localization::get_locale_from_headers(&headers, translator.languages.clone());
 
     next.run(request).await
 }

@@ -10,7 +10,7 @@ use crate::domain::AppState;
 #[derive(Template)]
 #[template(path = "generic/not_found.html")]
 struct NotFoundTemplate {
-    translator: crate::localization::Translator,
+    translator: crate::util::localization::Translator,
 }
 
 pub async fn not_found_page_handler(State(state): State<AppState>) -> impl IntoResponse {

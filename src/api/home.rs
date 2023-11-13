@@ -5,7 +5,7 @@ use axum::{
     response::{Html, IntoResponse},
 };
 
-use crate::{domain::AppState, localization::Translator};
+use crate::{domain::AppState, util::localization::Translator};
 
 #[derive(Template)]
 #[template(path = "home.html")]

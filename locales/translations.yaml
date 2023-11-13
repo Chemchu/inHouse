@@ -133,3 +133,66 @@ license:
 support:
   es_ES: Soporte
   en_US: Support
+account:
+  es_ES: Cuenta
+  en_US: Account
+notifications:
+  es_ES: Notificaciones
+  en_US: Notifications
+billing:
+  es_ES: Facturación
+  en_US: Billing
+teams:
+  es_ES: Equipos
+  en_US: Teams
+integrations:
+  es_ES: Integraciones
+  en_US: Integrations
+personal_information:
+  es_ES: Información personal
+  en_US: Personal information
+personal_information_description:
+  es_ES: Información personal y de contacto
+  en_US: Personal and contact information
+change_avatar:
+  es_ES: Cambiar foto de perfil 
+  en_US: Change avatar
+first_name:
+  es_ES: Nombre
+  en_US: First name
+last_name:
+  es_ES: Apellidos
+  en_US: Last name
+username:
+  es_ES: Nombre de usuario
+  en_US: Username
+change_password:
+  es_ES: Cambiar contraseña
+  en_US: Change password
+change_password_description:
+  es_ES: Actualiza la contraseña de tu cuenta
+  en_US: Update your password associated with your account
+current_password:
+  es_ES: Contraseña actual
+  en_US: Current password
+new_password:
+  es_ES: Nueva contraseña
+  en_US: New password
+confirm_new_password:
+  es_ES: Confirmar nueva contraseña
+  en_US: Confirm new password
+save:
+  es_ES: Guardar
+  en_US: Save
+cancel:
+  es_ES: Cancelar
+  en_US: Cancel
+delete_account:
+  es_ES: Eliminar cuenta
+  en_US: Delete account
+delete_account_description:
+  es_ES: Ya no quieres usar nuestro servicio? Puedes eliminar tu cuenta aquí. Esta acción no es reversible. Toda la información relacionada con esta cuenta será eliminada permanentemente.
+  en_US: No longer want to use our service? You can delete your account here. This action is not reversible. All information related to this account will be deleted permanently
+delete_account_button:
+  es_ES: Sí, eliminar mi cuenta
+  en_US: Yes, delete my account
