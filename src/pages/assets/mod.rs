@@ -27,6 +27,7 @@ static NONE: &str = "";
 
 async fn assets_handler(Path(path): Path<String>) -> impl IntoResponse {
     let mut headers = HeaderMap::new();
+    headers.insert(header::CACHE_CONTROL, "max-age=31536000".parse().unwrap());
 
     match path.as_str() {
         "style.css" => {
