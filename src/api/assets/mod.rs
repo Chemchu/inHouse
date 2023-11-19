@@ -17,12 +17,12 @@ pub fn routes() -> Router {
         )
 }
 
-static STYLE_CSS: &str = include_str!("../../../assets/style.css");
-static FAVICON: &str = include_str!("../../../assets/favicon.svg");
-static HTMX: &str = include_str!("../../../assets/htmx.min.js");
-static HYPERSCRIPT: &str = include_str!("../../../assets/hyperscript.min.js");
-static LOADER: &str = include_str!("../../../assets/loader.svg");
-static MANIFEST: &str = include_str!("../../../assets/pwa/manifest.json");
+static STYLE_CSS: &str = include_str!("../../assets/style.css");
+static FAVICON: &str = include_str!("../../assets/favicon.svg");
+static HTMX: &str = include_str!("../../assets/htmx.min.js");
+static HYPERSCRIPT: &str = include_str!("../../assets/hyperscript.min.js");
+static LOADER: &str = include_str!("../../assets/loader.svg");
+static MANIFEST: &str = include_str!("../../assets/pwa/manifest.json");
 static NONE: &str = "";
 
 async fn assets_handler(Path(path): Path<String>) -> impl IntoResponse {

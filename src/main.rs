@@ -1,14 +1,10 @@
 mod api;
 mod components;
-mod domain;
-mod util;
 
 use axum::{routing::get, Router};
 use std::net::SocketAddr;
 use tower_http::trace::{self, TraceLayer};
 use tracing::Level;
-
-use crate::domain::repository;
 
 #[tokio::main]
 async fn main() {
@@ -20,10 +16,9 @@ async fn main() {
     tracing_subscriber::fmt().with_target(false).pretty().init();
 
     let db = repository::connect_to_db().await.unwrap();
-    let translator =
-        util::localization::Translator::new("es_ES".to_string(), "./src/util/localization");
+    let translator = i18n::Translator::new("es_ES".to_string(), "./src/util/localization");
 
-    let state = domain::AppState {
+    let state = service::AppState {
         supabase_api_key: std::env::var("SUPABASE_API_KEY")
             .expect("SUPABASE_API_KEY environment variable not found!"),
         supabase_url: std::env::var("SUPABASE_URL")

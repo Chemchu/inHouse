@@ -1,9 +1,5 @@
-use crate::{
-    components::auth::sign_up_message::{
-        SignUpFailMessage, SignUpServerErrorMessage, SignUpSuccessMessage,
-    },
-    domain::AppState,
-    repository::auth::exists_by_email,
+use crate::components::auth::sign_up_message::{
+    SignUpFailMessage, SignUpServerErrorMessage, SignUpSuccessMessage,
 };
 use askama::Template;
 use axum::{
@@ -24,10 +20,10 @@ pub struct SignUpForm {
 #[derive(Template)]
 #[template(path = "auth/signup/signup.html")]
 struct SignupTemplate {
-    translator: crate::util::localization::Translator,
+    translator: i18n::Translator,
 }
 
-pub async fn signup_page_handler(State(state): State<AppState>) -> impl IntoResponse {
+pub async fn signup_page_handler(State(state): State<service::AppState>) -> impl IntoResponse {
     let template = SignupTemplate {
         translator: state.translator.clone(),
     };
@@ -38,7 +34,7 @@ pub async fn signup_page_handler(State(state): State<AppState>) -> impl IntoResp
 }
 
 pub async fn signup_handler(
-    State(state): State<AppState>,
+    State(state): State<service::AppState>,
     Form(payload): Form<SignUpForm>,
 ) -> impl IntoResponse {
     let correct_values = validate_form(&payload);
@@ -53,7 +49,7 @@ pub async fn signup_handler(
         return (StatusCode::OK, Html(reply_html).into_response());
     }
 
-    let email_in_use = exists_by_email(&state, &payload.email).await;
+    let email_in_use = repository::auth::exists_by_email(&state, &payload.email).await;
     match email_in_use {
         Ok(is_email_used) => {
             if is_email_used {

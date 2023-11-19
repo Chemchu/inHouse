@@ -2,10 +2,6 @@ use std::time::Duration;
 
 use sea_orm::{ConnectOptions, ConnectionTrait, Database, DatabaseConnection};
 
-use crate::domain::UserMetadata;
-
-use super::entity;
-
 pub mod auth;
 
 pub async fn connect_to_db() -> Result<DatabaseConnection, sea_orm::DbErr> {

@@ -6,18 +6,15 @@ use axum::{
 };
 use reqwest::{header, StatusCode};
 
-use crate::domain::AppState;
-
 pub async fn inject_localization<B>(
-    State(state): State<AppState>,
+    State(state): State<service::AppState>,
     headers: HeaderMap,
     request: Request<B>,
     next: Next<B>,
 ) -> Response {
     let mut translator = state.translator.clone();
 
-    translator.locale =
-        crate::util::localization::get_locale_from_headers(&headers, translator.languages.clone());
+    translator.locale = i18n::get_locale_from_headers(&headers, translator.languages.clone());
 
     next.run(request).await
 }

@@ -8,18 +8,15 @@ use axum::{
 use reqwest::{header, Error, Response};
 use serde::{Deserialize, Serialize};
 
-use crate::{
-    components::auth::login_failed_message::LoginFailedMessageTemplate, domain::AppState,
-    util::localization::Translator,
-};
+use crate::components::auth::login_failed_message::LoginFailedMessageTemplate;
 
 #[derive(Template)]
 #[template(path = "auth/login/login.html")]
 struct LoginTemplate {
-    translator: Translator,
+    translator: i18n::Translator,
 }
 
-pub async fn login_page_handler(State(state): State<AppState>) -> impl IntoResponse {
+pub async fn login_page_handler(State(state): State<service::AppState>) -> impl IntoResponse {
     let template = LoginTemplate {
         translator: state.translator.clone(),
     };
@@ -78,7 +75,7 @@ impl LoginResponse {
 }
 
 pub async fn login_handler(
-    State(state): State<AppState>,
+    State(state): State<service::AppState>,
     Form(payload): Form<LoginForm>,
 ) -> impl IntoResponse {
     match login(&state, &payload.email, &payload.password).await {
@@ -113,7 +110,7 @@ pub async fn login_handler(
     }
 }
 
-async fn login(state: &AppState, email: &str, password: &str) -> Result<Response, Error> {
+async fn login(state: &service::AppState, email: &str, password: &str) -> Result<Response, Error> {
     let mut body = std::collections::HashMap::new();
     body.insert("email", email);
     body.insert("password", password);

@@ -1,7 +1,5 @@
 use axum::{middleware, routing::get, Router};
 
-use crate::domain::AppState;
-
 use super::layer;
 
 pub mod login;
@@ -9,7 +7,7 @@ pub mod recover_account;
 pub mod signout;
 pub mod signup;
 
-pub fn routes(state: AppState) -> Router {
+pub fn routes(state: service::AppState) -> Router {
     Router::new()
         .route(
             "/login",

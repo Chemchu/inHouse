@@ -1,7 +1,5 @@
 use axum::{middleware, routing::get, Router};
 
-use crate::domain::AppState;
-
 use self::groceries::groceries_page_handler;
 use self::home::dashboard_home_page_handler;
 
@@ -11,7 +9,7 @@ pub mod groceries;
 pub mod home;
 pub mod user_settings;
 
-pub fn routes(state: AppState) -> Router {
+pub fn routes(state: service::AppState) -> Router {
     Router::new()
         .route("/dashboard", get(dashboard_home_page_handler))
         .route("/dashboard/groceries", get(groceries_page_handler))

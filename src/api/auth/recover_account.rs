@@ -5,15 +5,15 @@ use axum::{
     response::{Html, IntoResponse},
 };
 
-use crate::domain::AppState;
-
 #[derive(Template)]
 #[template(path = "auth/login/recover_account.html")]
 struct RecoverAccountTemplate {
-    translator: crate::util::localization::Translator,
+    translator: i18n::Translator,
 }
 
-pub async fn recover_account_page_handler(State(state): State<AppState>) -> impl IntoResponse {
+pub async fn recover_account_page_handler(
+    State(state): State<service::AppState>,
+) -> impl IntoResponse {
     let template = RecoverAccountTemplate {
         translator: state.translator.clone(),
     };

@@ -5,16 +5,14 @@ use axum::{
     response::{Html, IntoResponse},
 };
 
-use crate::{domain::AppState, util::localization::Translator};
-
 #[derive(Template)]
 #[template(path = "home.html")]
 struct HomeTemplate {
-    translator: Translator,
+    translator: i18n::Translator,
 }
 
 // TODO: add user extractor to check whether how main page or dashboard
-pub async fn home_page_handler(State(state): State<AppState>) -> impl IntoResponse {
+pub async fn home_page_handler(State(state): State<service::AppState>) -> impl IntoResponse {
     let template = HomeTemplate {
         translator: state.translator.clone(),
     };

@@ -5,15 +5,15 @@ use axum::{
     response::{Html, IntoResponse},
 };
 
-use crate::domain::AppState;
-
 #[derive(Template)]
 #[template(path = "generic/terms_and_conditions.html")]
 struct TermsAndConditionsTemplate {
-    translator: crate::util::localization::Translator,
+    translator: i18n::Translator,
 }
 
-pub async fn terms_and_conditions_page_handler(State(state): State<AppState>) -> impl IntoResponse {
+pub async fn terms_and_conditions_page_handler(
+    State(state): State<service::AppState>,
+) -> impl IntoResponse {
     let template = TermsAndConditionsTemplate {
         translator: state.translator.clone(),
     };

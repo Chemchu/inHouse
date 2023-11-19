@@ -5,22 +5,18 @@ use axum::{
 };
 use chrono::Datelike;
 use reqwest::StatusCode;
-
-use crate::{
-    domain::{AppState, Token},
-    util::localization::Translator,
-};
+use service::Token;
 
 #[derive(Template)]
 #[template(path = "dashboard/groceries/index.html")]
 struct GroceriesTemplate {
-    translator: Translator,
+    translator: i18n::Translator,
     current_year: i32,
     email: String,
 }
 
 pub async fn groceries_page_handler(
-    State(state): State<AppState>,
+    State(state): State<service::AppState>,
     Token(claims): Token,
 ) -> impl IntoResponse {
     let template = GroceriesTemplate {
