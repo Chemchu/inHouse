@@ -6,6 +6,7 @@ use serde::{Deserialize, Serialize};
 use crate::util::localization::Translator;
 
 pub mod entity;
+pub mod repository;
 
 #[derive(Clone)]
 pub struct AppState {

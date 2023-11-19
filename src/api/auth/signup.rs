@@ -2,8 +2,8 @@ use crate::{
     components::auth::sign_up_message::{
         SignUpFailMessage, SignUpServerErrorMessage, SignUpSuccessMessage,
     },
-    database::auth::exists_by_email,
     domain::AppState,
+    repository::auth::exists_by_email,
 };
 use askama::Template;
 use axum::{

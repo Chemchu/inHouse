@@ -35,6 +35,9 @@ pub async fn check_auth<B>(
             );
             tracing::info!("Redirecting to /dashboard...");
 
+            // let header = (header::LOCATION, "/dashboard");
+            // Err((StatusCode::SEE_OTHER, header))
+
             Err(Response::builder()
                 .header(header::LOCATION, "/dashboard")
                 .status(StatusCode::SEE_OTHER)
