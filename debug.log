@@ -1,0 +1,13 @@
+[2m2023-10-13T19:25:06.559167Z[0m [35mTRACE[0m [2mhyper::proto::h1::conn[0m[2m:[0m Conn::read_head
+[2m2023-10-13T19:25:06.559361Z[0m [35mTRACE[0m [2mhyper::proto::h1::conn[0m[2m:[0m flushed({role=server}): State { reading: Init, writing: Init, keep_alive: Busy }
+[2m2023-10-13T19:25:06.653036Z[0m [35mTRACE[0m [2mhyper::proto::h1::conn[0m[2m:[0m Conn::read_head
+[2m2023-10-13T19:25:06.653237Z[0m [35mTRACE[0m [2mhyper::proto::h1::io[0m[2m:[0m received 612 bytes
+[2m2023-10-13T19:25:06.653544Z[0m [35mTRACE[0m [1mparse_headers[0m[2m:[0m [2mhyper::proto::h1::role[0m[2m:[0m Request.parse [3mbytes[0m[2m=[0m612
+[2m2023-10-13T19:25:06.653737Z[0m [35mTRACE[0m [1mparse_headers[0m[2m:[0m [2mhyper::proto::h1::role[0m[2m:[0m Request.parse Complete(612)
+[2m2023-10-13T19:25:06.654075Z[0m [34mDEBUG[0m [2mhyper::proto::h1::io[0m[2m:[0m parsed 16 headers
+[2m2023-10-13T19:25:06.654142Z[0m [34mDEBUG[0m [2mhyper::proto::h1::conn[0m[2m:[0m incoming body is empty
+[2m2023-10-13T19:25:06.654530Z[0m [35mTRACE[0m [1mencode_headers[0m[2m:[0m [2mhyper::proto::h1::role[0m[2m:[0m Server::encode status=200, body=Some(Known(8070)), req_method=Some(GET)
+[2m2023-10-13T19:25:06.654721Z[0m [35mTRACE[0m [2mhyper::proto::h1::encode[0m[2m:[0m sized write, len = 8070
+[2m2023-10-13T19:25:06.654784Z[0m [35mTRACE[0m [2mhyper::proto::h1::io[0m[2m:[0m buffer.queue [3mself.len[0m[2m=[0m118 [3mbuf.len[0m[2m=[0m8070
+[2m2023-10-13T19:25:06.654960Z[0m [34mDEBUG[0m [2mhyper::proto::h1::io[0m[2m:[0m flushed 8188 bytes
+[2m2023-10-13T19:25:06.655020Z[0m [35mTRACE[0m [2mhyper::proto::h1::conn[0m[2m:[0m flushed({role=server}): State { reading: Init, writing: Init, keep_alive: Idle }

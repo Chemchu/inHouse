@@ -1,0 +1,148 @@
+{% extends "base.html" %} {% block title %}InHouse - Registrarse{% endblock %}
+{% block content %}
+<div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+  <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+    <h1
+      class="mt-10 text-center text-5xl font-bold leading-9 tracking-tight text-gray-900 cursor-pointer"
+      alt="InHouse"
+      hx-get="/"
+      hx-push-url="true"
+      hx-swap="innerHtml transition:true"
+      hx-target="#content"
+    >
+      InHouse
+    </h1>
+    <h2
+      class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900"
+    >
+      {{ translator.translate("sign_up") }}
+    </h2>
+  </div>
+
+  <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+    <form
+      id="signup-form"
+      class="space-y-6"
+      hx-post="/sign-up"
+      hx-target="#signup-form"
+      hx-indicator="#indicator"
+    >
+      <div>
+        <label
+          for="email"
+          class="block text-sm font-medium leading-6 text-gray-900"
+          >{{ translator.translate("email") }}</label
+        >
+        <div class="mt-2">
+          <input
+            id="email"
+            name="email"
+            type="email"
+            autocomplete="email"
+            required
+            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          />
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <div>
+          <div class="flex items-center justify-between">
+            <label
+              for="password"
+              class="block text-sm font-medium leading-6 text-gray-900"
+              >{{ translator.translate("password") }}</label
+            >
+          </div>
+          <div class="mt-2">
+            <input
+              id="password"
+              name="password"
+              type="password"
+              autocomplete="current-password"
+              required
+              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between">
+            <label
+              for="retry-password"
+              class="block text-sm font-medium leading-6 text-gray-900"
+              >{{ translator.translate("retry_password") }}
+            </label>
+          </div>
+          <div class="mt-2">
+            <input
+              id="retry_password"
+              name="retry_password"
+              type="password"
+              autocomplete="current-password"
+              required
+              class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Accept conditions -->
+      <div class="relative flex items-center justify-center py-1">
+        <div class="flex h-6 items-center">
+          <input
+            id="conditions"
+            aria-describedby="conditions"
+            name="conditions"
+            type="checkbox"
+            required
+            class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+          />
+        </div>
+        <div class="ml-3 text-sm leading-6">
+          <label for="comments" class="font-medium text-gray-500"
+            >{{ translator.translate("i_have_read_and_agreed") }}</label
+          >
+          <a
+            href="/terms-and-conditions"
+            target="_blank"
+            rel="noopener noreferrer"
+            id="comments-description"
+            class="text-gray-900"
+            ><span class="sr-only">
+              {{ translator.translate("i_have_read_and_agreed") }} </span
+            >{{ translator.translate("terms_and_conditions") }}</a
+          >
+        </div>
+      </div>
+
+      <div>
+        <button
+          type="submit"
+          value="Submit"
+          hx-disabled-elt="true"
+          class="flex w-full justify-center items-center gap-2 rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-slate-50 disabled:text-slate-200 disabled:cursor-not-allowed"
+        >
+          <span> {{ translator.translate("sign_up") }} </span>
+          <div id="indicator" class="flex justify-center">
+            <img class="htmx-indicator" src="/_assets/loader.svg" />
+          </div>
+        </button>
+      </div>
+    </form>
+
+    <p class="mt-10 text-center text-sm text-gray-500">
+      {{ translator.translate("already_have_an_account") }}
+      <a
+        href="/login"
+        hx-target="#content"
+        hx-swap="innerHTML transition:true"
+        class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+      >
+        {{ translator.translate("login_here") }}
+      </a>
+    </p>
+  </div>
+</div>
+
+{% endblock %}
