@@ -11,6 +11,7 @@ path = "src/lib.rs"
 [dependencies]
 entity = { path = "../entity" }
 service = { path = "../service" }
+migration = { path = "../migration" }
 sea-orm = { version = "0.12" }
 serde = { version = "1", features = ["derive"] }
 chrono = "0.4.31"

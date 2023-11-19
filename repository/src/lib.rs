@@ -1,5 +1,6 @@
 use std::time::Duration;
 
+use migration::{Migrator, MigratorTrait};
 use sea_orm::{ConnectOptions, ConnectionTrait, Database, DatabaseConnection};
 
 pub mod auth;
@@ -28,14 +29,15 @@ pub async fn connect_to_db() -> Result<DatabaseConnection, sea_orm::DbErr> {
         .set_schema_search_path("public"); // Setting default PostgreSQL schema
 
     let db = Database::connect(opt).await?;
+    Migrator::up(&db, None).await?;
 
-    match initialize_schema(&db).await {
-        Ok(_) => {}
-        Err(err) => {
-            tracing::error!("Error initializing database schema: {:?}", err);
-            std::process::exit(1);
-        }
-    }
+    // match initialize_schema(&db).await {
+    //     Ok(_) => {}
+    //     Err(err) => {
+    //         tracing::error!("Error initializing database schema: {:?}", err);
+    //         std::process::exit(1);
+    //     }
+    // }
 
     Ok(db)
 }

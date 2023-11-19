@@ -9,9 +9,6 @@ use tracing::Level;
 #[tokio::main]
 async fn main() {
     dotenv::dotenv().ok();
-    let environment =
-        std::env::var("ENVIRONMENT").expect("ENVIRONMENT environment variable not found!");
-    dotenv::from_filename(format!(".env.{}", environment)).ok();
 
     tracing_subscriber::fmt().with_target(false).pretty().init();
 
