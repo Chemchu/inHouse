@@ -13,7 +13,7 @@ async fn main() {
     tracing_subscriber::fmt().with_target(false).pretty().init();
 
     let db = repository::connect_to_db().await.unwrap();
-    let translator = i18n::Translator::new("es_ES".to_string(), "./src/util/localization");
+    let translator = i18n::Translator::new("es_ES".to_string());
 
     let state = service::AppState {
         supabase_api_key: std::env::var("SUPABASE_API_KEY")
