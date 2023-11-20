@@ -1,4 +1,5 @@
 use axum::{
+    body::Empty,
     extract::State,
     http::{HeaderMap, Request},
     middleware::Next,
@@ -32,13 +33,10 @@ pub async fn check_auth<B>(
             );
             tracing::info!("Redirecting to /dashboard...");
 
-            // let header = (header::LOCATION, "/dashboard");
-            // Err((StatusCode::SEE_OTHER, header))
-
             Err(Response::builder()
                 .header(header::LOCATION, "/dashboard")
                 .status(StatusCode::SEE_OTHER)
-                .body(http_body::Empty::new())
+                .body(Empty::new())
                 .unwrap())
         }
         None => Ok(next.run(request).await),
@@ -57,7 +55,7 @@ pub async fn check_logged_user<B>(
             Err(Response::builder()
                 .header(header::LOCATION, "/login")
                 .status(StatusCode::SEE_OTHER)
-                .body(http_body::Empty::new())
+                .body(Empty::new())
                 .unwrap())
         }
     }
