@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#FFF" />
+    <title>{% block title %}{{ title }}{% endblock %}</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/_assets/htmx.min.js"></script>
+    <script src="/_assets/hyperscript.min.js"></script>
+
+    <link rel="stylesheet" href="/_assets/style.css" />
+    <link rel="icon" type="image/x-icon" href="/_assets/favicon.svg" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="manifest" href="/_assets/manifest.json" />
+
+    <meta
+      name="description"
+      content="InHouse helps you keep your house tigh."
+    />
+    <meta name="view-transition" content="same-origin" />
+  </head>
+
+  <body hx-boost="true">
+    <div id="content" class="h-full w-full">
+      {% block content %}{% endblock %}
+    </div>
+  </body>
+</html>
