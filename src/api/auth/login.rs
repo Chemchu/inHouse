@@ -63,12 +63,14 @@ impl LoginResponse {
         header_map.insert(
             header::SET_COOKIE,
             format!(
-                "sb:token={}; sb:refresh_token={}; Max-Age={}; Path=/; HttpOnly; Secure; SameSite=Strict",
-                self.access_token, self.refresh_token ,self.expires_in
+                "sb:token={}; Max-Age={}; sb:refresh_token={}; Path=/; HttpOnly; Secure; SameSite=Strict",
+                self.access_token, self.expires_in, self.refresh_token
             )
             .parse()
             .unwrap(),
         );
+
+        tracing::info!("Headers: {:?}", header_map);
 
         header_map
     }
@@ -87,6 +89,9 @@ pub async fn login_handler(
                 tracing::info!("Supabase login successful: {:?}", body);
 
                 let login_response: LoginResponse = serde_json::from_str(&body).unwrap();
+
+                tracing::info!("Supabase login successful: {:?}", login_response);
+
                 let mut headers = login_response.headers();
                 headers.insert("HX-Redirect", "/dashboard".parse().unwrap());
                 (StatusCode::OK, headers.into_response())
