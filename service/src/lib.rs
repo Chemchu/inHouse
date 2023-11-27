@@ -1,7 +1,13 @@
-use axum::{async_trait, extract::FromRequestParts, http::request::Parts};
+use axum::{
+    async_trait,
+    extract::FromRequestParts,
+    http::request::Parts,
+    response::{IntoResponse, Response},
+};
 use i18n::Translator;
 use jsonwebtoken::{decode, Algorithm, DecodingKey, Validation};
-use reqwest::{header::COOKIE, StatusCode};
+use regex::Regex;
+use reqwest::{header, StatusCode};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone)]
@@ -19,29 +25,49 @@ impl<S> FromRequestParts<S> for Token
 where
     S: Send + Sync,
 {
-    type Rejection = (StatusCode, &'static str);
+    // type Rejection = (StatusCode, &'static str);
+    type Rejection = Response;
 
     async fn from_request_parts(parts: &mut Parts, _: &S) -> Result<Self, Self::Rejection> {
         let jwt_key =
             std::env::var("JWT_SECRET").expect("JWT_SECRET environment variable not found!");
 
-        if let Some(jwt) = parts.headers.get(COOKIE) {
-            let mut validator = Validation::new(Algorithm::HS256);
-            validator.set_audience(&["authenticated"]);
+        if let Some(jwt) = parts.headers.get(header::COOKIE) {
+            let pattern = r#"sb:token=([^;]+)"#;
+            let regex = Regex::new(pattern).expect("Invalid regex pattern");
 
-            let claims = decode::<Claims>(
-                jwt.to_str().unwrap().split('=').last().unwrap(),
-                &DecodingKey::from_secret(jwt_key.clone().as_ref()),
-                &validator,
-            );
-            if claims.is_err() {
-                tracing::error!("Error decoding header: {:?}", claims.err().unwrap());
-                return Err((StatusCode::UNAUTHORIZED, "Unauthorized"));
+            // Find the first match in the cookie string
+            if let Some(captures) = regex.captures(jwt.to_str().unwrap()) {
+                // Extract the content of sb:token
+                let sb_token_content = captures.get(1).map_or("", |m| m.as_str());
+
+                let mut validator = Validation::new(Algorithm::HS256);
+                validator.set_audience(&["authenticated"]);
+
+                let claims = decode::<Claims>(
+                    sb_token_content,
+                    &DecodingKey::from_secret(jwt_key.clone().as_ref()),
+                    &validator,
+                );
+                if claims.is_err() {
+                    tracing::error!("Error decoding header: {:?}", claims.err().unwrap());
+                    let mut header_map = header::HeaderMap::new();
+                    header_map.insert(header::SET_COOKIE, "sb:token=; Max-Age=0".parse().unwrap());
+                    header_map.append(
+                        header::SET_COOKIE,
+                        "sb:refresh=; Max-Age=0".parse().unwrap(),
+                    );
+                    header_map.append(header::LOCATION, "/login".parse().unwrap());
+
+                    return Err((StatusCode::SEE_OTHER, header_map.into_response()).into_response());
+                }
+
+                Ok(Token(claims.unwrap().claims))
+            } else {
+                Err((StatusCode::UNAUTHORIZED, "Unauthorized").into_response())
             }
-
-            Ok(Token(claims.unwrap().claims))
         } else {
-            Err((StatusCode::UNAUTHORIZED, "Unauthorized"))
+            Err((StatusCode::UNAUTHORIZED, "Unauthorized").into_response())
         }
     }
 }
