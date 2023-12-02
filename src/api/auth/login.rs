@@ -72,8 +72,8 @@ impl LoginResponse {
         header_map.append(
             header::SET_COOKIE,
             format!(
-                "sb:refresh={}; Max-Age={}; Path=/; HttpOnly; Secure; SameSite=Strict",
-                self.refresh_token, self.expires_in
+                "sb:refresh={}; Path=/; HttpOnly; Secure; SameSite=Strict",
+                self.refresh_token
             )
             .parse()
             .unwrap(),

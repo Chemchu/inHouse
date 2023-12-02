@@ -28,6 +28,11 @@ where
     // type Rejection = (StatusCode, &'static str);
     type Rejection = Response;
 
+    /**
+     * This extractor checks if the cookie contains a valid token
+     * If it does, return the token
+     * If it doesn't, redirect to /login
+     */
     async fn from_request_parts(parts: &mut Parts, _: &S) -> Result<Self, Self::Rejection> {
         let jwt_key =
             std::env::var("JWT_SECRET").expect("JWT_SECRET environment variable not found!");
@@ -49,7 +54,9 @@ where
                     &DecodingKey::from_secret(jwt_key.clone().as_ref()),
                     &validator,
                 );
-                if claims.is_err() {
+                if let Ok(claims) = claims {
+                    Ok(Token(claims.claims))
+                } else {
                     tracing::error!("Error decoding header: {:?}", claims.err().unwrap());
                     let mut header_map = header::HeaderMap::new();
                     header_map.insert(header::SET_COOKIE, "sb:token=; Max-Age=0".parse().unwrap());
@@ -59,10 +66,8 @@ where
                     );
                     header_map.append(header::LOCATION, "/login".parse().unwrap());
 
-                    return Err((StatusCode::SEE_OTHER, header_map.into_response()).into_response());
+                    Err((StatusCode::SEE_OTHER, header_map.into_response()).into_response())
                 }
-
-                Ok(Token(claims.unwrap().claims))
             } else {
                 Err((StatusCode::UNAUTHORIZED, "Unauthorized").into_response())
             }
