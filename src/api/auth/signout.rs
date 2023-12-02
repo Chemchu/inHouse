@@ -1,10 +1,14 @@
 use axum::{http::HeaderMap, response::IntoResponse};
-use reqwest::StatusCode;
+use reqwest::{header, StatusCode};
 
 pub async fn signout_handler(mut headers: HeaderMap) -> impl IntoResponse {
     headers.insert(
-        "Set-Cookie",
+        header::SET_COOKIE,
         "sb:token=; Path=/; HttpOnly; Max-Age=0".parse().unwrap(),
+    );
+    headers.append(
+        header::SET_COOKIE,
+        "sb:refresh=; Path=/; HttpOnly; Max-Age=0".parse().unwrap(),
     );
     headers.insert("HX-Redirect", "/login".parse().unwrap());
 

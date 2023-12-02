@@ -196,3 +196,18 @@ delete_account_description:
 delete_account_button:
   es_ES: Sí, eliminar mi cuenta
   en_US: Yes, delete my account
+members:
+  es_ES: Integrantes 
+  en_US: Members
+chats:
+  es_ES: Chats
+  en_US: Chats
+summary:
+  es_ES: Resumen
+  en_US: Summary
+payments:
+  es_ES: Pagos
+  en_US: Payments
+events:
+  es_ES: Eventos
+  en_US: Events

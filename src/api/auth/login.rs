@@ -59,12 +59,21 @@ struct LoginResponse {
 impl LoginResponse {
     fn headers(&self) -> HeaderMap {
         let mut header_map = HeaderMap::new();
-
         header_map.insert(
             header::SET_COOKIE,
             format!(
-                "sb:token={}; sb:refresh_token={}; Max-Age={}; Path=/; HttpOnly; Secure; SameSite=Strict",
-                self.access_token, self.refresh_token ,self.expires_in
+                "sb:token={}; Max-Age={}; Path=/; HttpOnly; Secure; SameSite=Strict",
+                self.access_token, self.expires_in
+            )
+            .parse()
+            .unwrap(),
+        );
+
+        header_map.append(
+            header::SET_COOKIE,
+            format!(
+                "sb:refresh={}; Path=/; HttpOnly; Secure; SameSite=Strict",
+                self.refresh_token
             )
             .parse()
             .unwrap(),
@@ -83,12 +92,13 @@ pub async fn login_handler(
             let status = response.status();
             if status.is_success() {
                 let body = response.text().await.unwrap();
-
                 tracing::info!("Supabase login successful: {:?}", body);
 
                 let login_response: LoginResponse = serde_json::from_str(&body).unwrap();
+
                 let mut headers = login_response.headers();
-                headers.insert("HX-Redirect", "/dashboard".parse().unwrap());
+                headers.append("HX-Redirect", "/dashboard".parse().unwrap());
+
                 (StatusCode::OK, headers.into_response())
             } else {
                 tracing::info!("Supabase login failed: {:?}", response);

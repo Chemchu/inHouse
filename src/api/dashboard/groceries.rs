@@ -3,7 +3,6 @@ use axum::{
     extract::State,
     response::{Html, IntoResponse},
 };
-use chrono::Datelike;
 use reqwest::StatusCode;
 use service::Token;
 
@@ -11,7 +10,6 @@ use service::Token;
 #[template(path = "dashboard/groceries/index.html")]
 struct GroceriesTemplate {
     translator: i18n::Translator,
-    current_year: i32,
     email: String,
 }
 
@@ -21,7 +19,6 @@ pub async fn groceries_page_handler(
 ) -> impl IntoResponse {
     let template = GroceriesTemplate {
         translator: state.translator.clone(),
-        current_year: chrono::Utc::now().year(),
         email: claims.email,
     };
 

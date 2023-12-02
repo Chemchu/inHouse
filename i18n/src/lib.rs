@@ -25,7 +25,8 @@ pub struct Translator {
 static DEFAULT_LOCALE: &str = "en_US";
 
 impl Translator {
-    pub fn new(locale: String, locale_path: &'static str) -> Self {
+    pub fn new(locale: String) -> Self {
+        let locale_path = "./i18n/src";
         let translations = init_translator(locale_path);
         Translator {
             locale,
