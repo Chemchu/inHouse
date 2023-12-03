@@ -36,8 +36,8 @@ pub async fn check_auth<B>(
     next: Next<B>,
 ) -> Result<Response, impl IntoResponse> {
     match headers.get(header::COOKIE) {
-        Some(cookies) => {
-            if cookies.to_str().unwrap().contains("sb:token=") {
+        Some(cookies) => match check_authentication_cookies(cookies.to_str().unwrap()) {
+            Some(Cookies::Token(_)) => {
                 tracing::info!(
                     "User already logged in. Cookies: {}",
                     cookies.to_str().unwrap()
@@ -49,10 +49,22 @@ pub async fn check_auth<B>(
                     .status(StatusCode::SEE_OTHER)
                     .body(Empty::new())
                     .unwrap())
-            } else {
-                Ok(next.run(request).await)
             }
-        }
+            Some(Cookies::Refresh(_)) => {
+                tracing::info!(
+                    "User already logged in. Cookies: {}",
+                    cookies.to_str().unwrap()
+                );
+                tracing::info!("Redirecting to /dashboard...");
+
+                Err(Response::builder()
+                    .header(header::LOCATION, "/dashboard")
+                    .status(StatusCode::SEE_OTHER)
+                    .body(Empty::new())
+                    .unwrap())
+            }
+            None => Ok(next.run(request).await),
+        },
         None => Ok(next.run(request).await),
     }
 }
