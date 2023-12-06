@@ -22,13 +22,48 @@ content %}
   <body class="h-full">
   ```
 -->
-<div hx-swap="innerHTML transition:true">
+<div
+  hx-swap="innerHTML transition:true"
+  x-data="{ pathName: window.location.pathname }"
+>
+  <script>
+    document.addEventListener("alpine:init", () => {
+      Alpine.store("sidebar", {
+        open: false,
+
+        toggle() {
+          this.open = !this.open;
+        },
+        close() {
+          this.open = false;
+        },
+      });
+      Alpine.store("userMenu", {
+        open: false,
+
+        toggle() {
+          this.open = !this.open;
+        },
+        close() {
+          this.open = false;
+        },
+      });
+    });
+  </script>
+
   <!-- Off-canvas menu for mobile, show/hide based on off-canvas menu state. -->
   <div
     id="mobile-sidebar-menu"
-    class="hidden opacity-0 relative z-50 lg:hidden"
+    class="relative z-50 lg:hidden"
     role="dialog"
     aria-modal="true"
+    x-show="$store.sidebar.open"
+    x-transition:enter="transition-opacity ease-linear duration-150"
+    x-transition:enter-start="opacity-0"
+    x-transition:enter-end="opacity-100"
+    x-transition:leave="transition-opacity ease-linear duration-150"
+    x-transition:leave-start="opacity-100"
+    x-transition:leave-end="opacity-0"
   >
     <!--
       Off-canvas menu backdrop, show/hide based on off-canvas menu state.
@@ -68,14 +103,7 @@ content %}
           <button
             type="button"
             class="-m-2.5 p-2.5"
-            _="on click 
-            if #mobile-sidebar-menu match .hidden
-              toggle .hidden on #mobile-sidebar-menu
-              transition #mobile-sidebar-menu's opacity to 1 over 150ms
-            else 
-              transition #mobile-sidebar-menu's opacity to 0 over 150ms
-              toggle .hidden on #mobile-sidebar-menu
-            end"
+            @click="$store.sidebar.toggle()"
           >
             <span class="sr-only">Close sidebar</span>
             <svg
@@ -110,10 +138,11 @@ content %}
                     <!-- Current: "bg-gray-50 text-indigo-600", Default: "text-gray-700 hover:text-indigo-600 hover:bg-gray-50" -->
                     <a
                       href="/dashboard"
-                      class="bg-gray-50 text-indigo-600 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
+                      class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
+                      :class="pathName == '/dashboard' ? 'bg-gray-50 text-indigo-600' : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50'"
                     >
                       <svg
-                        class="h-6 w-6 shrink-0 text-indigo-600"
+                        class="h-6 w-6 shrink-0"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke-width="1.5"
@@ -132,10 +161,11 @@ content %}
                   <li>
                     <a
                       href="/dashboard/members"
-                      class="text-gray-700 hover:text-indigo-600 hover:bg-gray-50 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
+                      class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
+                      :class="pathName == '/dashboard/members' ? 'bg-gray-50 text-indigo-600' : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50'"
                     >
                       <svg
-                        class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600"
+                        class="h-6 w-6 shrink-0"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke-width="1.5"
@@ -154,7 +184,8 @@ content %}
                   <li>
                     <a
                       href="/dashboard/groceries"
-                      class="text-gray-700 hover:text-indigo-600 hover:bg-gray-50 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
+                      class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
+                      :class="pathName == '/dashboard/groceries' ? 'bg-gray-50 text-indigo-600' : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50'"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -162,7 +193,7 @@ content %}
                         viewBox="0 0 24 24"
                         stroke-width="1.5"
                         stroke="currentColor"
-                        class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600"
+                        class="h-6 w-6 shrink-0"
                         aria-hidden="true"
                       >
                         <path
@@ -177,7 +208,8 @@ content %}
                   <li>
                     <a
                       href="/dashboard/chats"
-                      class="text-gray-700 hover:text-indigo-600 hover:bg-gray-50 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
+                      class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
+                      :class="pathName == '/dashboard/chats' ? 'bg-gray-50 text-indigo-600' : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50'"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -185,7 +217,7 @@ content %}
                         viewBox="0 0 24 24"
                         stroke-width="1.5"
                         stroke="currentColor"
-                        class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600"
+                        class="h-6 w-6 shrink-0"
                         aria-hidden="true"
                       >
                         <path
@@ -200,15 +232,16 @@ content %}
                   <li>
                     <a
                       href="/dashboard/payments"
-                      class="text-gray-700 hover:text-indigo-600 hover:bg-gray-50 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
+                      class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
+                      :class="pathName == '/dashboard/payments' ? 'bg-gray-50 text-indigo-600' : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50'"
                     >
                       <svg
+                        class="h-6 w-6 shrink-0"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke-width="1.5"
                         stroke="currentColor"
-                        class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600"
                         aria-hidden="true"
                       >
                         <path
@@ -223,10 +256,11 @@ content %}
                   <li>
                     <a
                       href="/dashboard/summary"
-                      class="text-gray-700 hover:text-indigo-600 hover:bg-gray-50 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
+                      class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
+                      :class="pathName == '/dashboard/summary' ? 'bg-gray-50 text-indigo-600' : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50'"
                     >
                       <svg
-                        class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600"
+                        class="h-6 w-6 shrink-0"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke-width="1.5"
@@ -571,14 +605,7 @@ content %}
         <button
           type="button"
           class="-m-2.5 p-2.5 text-gray-700 lg:hidden"
-          _="on click 
-            if #mobile-sidebar-menu match .hidden
-              toggle .hidden on #mobile-sidebar-menu
-              transition #mobile-sidebar-menu's opacity to 1 over 150ms
-            else 
-              transition #mobile-sidebar-menu's opacity to 0 over 150ms
-              toggle .hidden on #mobile-sidebar-menu
-            end"
+          @click="$store.sidebar.toggle()"
         >
           <span class="sr-only">Open sidebar</span>
           <svg
@@ -652,28 +679,14 @@ content %}
             ></div>
 
             <!-- Profile dropdown -->
-            <div
-              class="relative"
-              _="on click from elsewhere 
-                if #user-menu do not match .hidden 
-                  transition #user-menu's opacity to 0 over 150ms
-                  toggle .hidden on #user-menu
-                end"
-            >
+            <div class="relative" @click.outside="$store.userMenu.close()">
               <button
                 type="button"
                 class="-m-1.5 flex items-center p-1.5"
                 id="user-menu-button"
                 aria-expanded="false"
                 aria-haspopup="true"
-                _="on click 
-                  if #user-menu match .hidden
-                    toggle .hidden on #user-menu
-                    transition #user-menu's opacity to 1 over 150ms
-                  else 
-                    transition #user-menu's opacity to 0 over 150ms
-                    toggle .hidden on #user-menu
-                  end"
+                @click="$store.userMenu.toggle()"
               >
                 <span class="sr-only">Open user menu</span>
                 <img
@@ -715,11 +728,18 @@ content %}
 
               <div
                 id="user-menu"
-                class="hidden opacity-0 absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                class="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                 role="menu"
                 aria-orientation="vertical"
                 aria-labelledby="menu-button"
                 tabindex="-1"
+                x-show="$store.userMenu.open"
+                x-transition:enter="transition ease-out duration-100"
+                x-transition:enter-start="transform opacity-0 scale-95"
+                x-transition:enter-end="transform opacity-100 scale-100"
+                x-transition:leave="transition ease-in duration-75"
+                x-transition:leave-start="transform opacity-100 scale-100"
+                x-transition:leave-end="transform opacity-0 scale-95"
               >
                 <div class="px-4 py-3" role="none">
                   <p class="text-sm" role="none">
@@ -787,5 +807,4 @@ content %}
     </main>
   </div>
 </div>
-
 {% endblock %}

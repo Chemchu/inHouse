@@ -20,7 +20,7 @@ pub fn routes() -> Router {
 static STYLE_CSS: &str = include_str!("../../assets/style.css");
 static FAVICON: &str = include_str!("../../assets/favicon.svg");
 static HTMX: &str = include_str!("../../assets/htmx.min.js");
-static HYPERSCRIPT: &str = include_str!("../../assets/hyperscript.min.js");
+static ALPINE: &str = include_str!("../../assets/alpine.min.js");
 static MANIFEST: &str = include_str!("../../assets/pwa/manifest.json");
 static NONE: &str = "";
 
@@ -41,9 +41,9 @@ async fn assets_handler(Path(path): Path<String>) -> impl IntoResponse {
             headers.insert(header::CONTENT_TYPE, "text/javascript".parse().unwrap());
             (StatusCode::OK, headers, HTMX)
         }
-        "hyperscript.min.js" => {
+        "alpine.min.js" => {
             headers.insert(header::CONTENT_TYPE, "text/javascript".parse().unwrap());
-            (StatusCode::OK, headers, HYPERSCRIPT)
+            (StatusCode::OK, headers, ALPINE)
         }
         "manifest.json" => {
             headers.insert(header::CONTENT_TYPE, "application/json".parse().unwrap());
