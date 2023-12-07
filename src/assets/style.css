@@ -2,6 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+    font-family: 'Inter';
+    src: url('fonts/Inter-VariableFont_slnt\,wght.ttf') format('truetype');
+    src: url('fonts/Inter-Regular.ttf') format('truetype');
+
+    /* src: url('fonts/Inter-Black.ttf') format('truetype');
+    src: url('fonts/Inter-Bold.ttf') format('truetype');
+    src: url('fonts/Inter-ExtraBold.ttf') format('truetype');
+    src: url('fonts/Inter-ExtraLight.ttf') format('truetype');
+    src: url('fonts/Inter-Light.ttf') format('truetype');
+    src: url('fonts/Inter-Medium.ttf') format('truetype');
+    src: url('fonts/Inter-Regular.ttf') format('truetype');
+    src: url('fonts/Inter-SemiBold.ttf') format('truetype');
+    src: url('fonts/Inter-Thin.ttf') format('truetype'); */
+}
+
 body {
     font-family: 'Inter', sans-serif;
 }
