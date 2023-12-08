@@ -11,6 +11,7 @@ use service::Token;
 struct SettingsTemplate {
     translator: i18n::Translator,
     email: String,
+    path: String,
 }
 
 pub async fn settings_page_handler(
@@ -20,6 +21,7 @@ pub async fn settings_page_handler(
     let template = SettingsTemplate {
         translator: state.translator.clone(),
         email: claims.email,
+        path: "/dashboard/settings".to_string(),
     };
 
     let reply_html = askama::Template::render(&template).unwrap();

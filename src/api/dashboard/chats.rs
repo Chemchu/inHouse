@@ -11,6 +11,7 @@ use service::Token;
 struct ChatsTemplate {
     translator: i18n::Translator,
     email: String,
+    path: String,
 }
 
 pub async fn chats_page_handler(
@@ -20,6 +21,7 @@ pub async fn chats_page_handler(
     let template = ChatsTemplate {
         translator: state.translator.clone(),
         email: claims.email,
+        path: "/dashboard/chats".to_string(),
     };
 
     let reply_html = askama::Template::render(&template).unwrap();

@@ -11,6 +11,7 @@ use service::Token;
 struct GroceriesTemplate {
     translator: i18n::Translator,
     email: String,
+    path: String,
 }
 
 pub async fn groceries_page_handler(
@@ -20,6 +21,7 @@ pub async fn groceries_page_handler(
     let template = GroceriesTemplate {
         translator: state.translator.clone(),
         email: claims.email,
+        path: "/dashboard/groceries".to_string(),
     };
 
     let reply_html = askama::Template::render(&template).unwrap();

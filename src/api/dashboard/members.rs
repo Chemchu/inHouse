@@ -11,6 +11,7 @@ use service::Token;
 struct MembersTemplate {
     translator: i18n::Translator,
     email: String,
+    path: String,
 }
 
 pub async fn members_page_handler(
@@ -20,6 +21,7 @@ pub async fn members_page_handler(
     let template = MembersTemplate {
         translator: state.translator.clone(),
         email: claims.email,
+        path: "/dashboard/members".to_string(),
     };
 
     let reply_html = askama::Template::render(&template).unwrap();

@@ -11,6 +11,7 @@ use service::Token;
 struct DashboardHomeTemplate {
     translator: i18n::Translator,
     email: String,
+    path: String,
 }
 
 pub async fn dashboard_home_page_handler(
@@ -20,6 +21,7 @@ pub async fn dashboard_home_page_handler(
     let template = DashboardHomeTemplate {
         translator: state.translator.clone(),
         email: claims.email,
+        path: "/dashboard".to_string(),
     };
 
     let reply_html = askama::Template::render(&template).unwrap();
