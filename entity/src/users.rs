@@ -44,4 +44,14 @@ pub struct Model {
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {}
 
+// impl Related<super::viviendas::Entity> for Entity {
+//     fn to() -> RelationDef {
+//         super::user_vivienda::Relation::Viviendas.def()
+//     }
+
+//     fn via() -> Option<RelationDef> {
+//         Some(super::user_vivienda::Relation::Users.def().rev())
+//     }
+// }
+
 impl ActiveModelBehavior for ActiveModel {}
