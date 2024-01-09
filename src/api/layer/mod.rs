@@ -1,20 +1,19 @@
 use axum::{
-    body::Empty,
-    extract::State,
-    http::{HeaderMap, Request},
+    body::Body,
+    extract::{Request, State},
+    http::{header, HeaderMap, StatusCode},
     middleware::Next,
     response::{IntoResponse, Response},
 };
-use reqwest::{header, StatusCode};
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use service::AppState;
 
-pub async fn inject_localization<B>(
+pub async fn inject_localization(
     State(state): State<service::AppState>,
     headers: HeaderMap,
-    request: Request<B>,
-    next: Next<B>,
+    request: Request,
+    next: Next,
 ) -> Response {
     let mut translator = state.translator.clone();
 
@@ -30,10 +29,10 @@ pub async fn inject_localization<B>(
 ///
 /// This middleware function is commonly used in the login and register routes to prevent the user
 /// to login again if it is already logged in.
-pub async fn check_auth<B>(
+pub async fn check_auth(
     headers: HeaderMap,
-    request: Request<B>,
-    next: Next<B>,
+    request: Request,
+    next: Next,
 ) -> Result<Response, impl IntoResponse> {
     match headers.get(header::COOKIE) {
         Some(cookies) => match check_authentication_cookies(cookies.to_str().unwrap()) {
@@ -47,7 +46,7 @@ pub async fn check_auth<B>(
                 Err(Response::builder()
                     .header(header::LOCATION, "/dashboard")
                     .status(StatusCode::SEE_OTHER)
-                    .body(Empty::new())
+                    .body(Body::empty())
                     .unwrap())
             }
             Some(Cookies::Refresh(_)) => {
@@ -60,7 +59,7 @@ pub async fn check_auth<B>(
                 Err(Response::builder()
                     .header(header::LOCATION, "/dashboard")
                     .status(StatusCode::SEE_OTHER)
-                    .body(Empty::new())
+                    .body(Body::empty())
                     .unwrap())
             }
             None => Ok(next.run(request).await),
@@ -77,11 +76,11 @@ pub async fn check_auth<B>(
 /// * If the refresh fails, redirect to /login.
 ///
 /// This middleware function is commonly used in the dashboard routes.
-pub async fn check_logged_user<B>(
+pub async fn check_logged_user(
     State(state): State<service::AppState>,
     headers: HeaderMap,
-    mut request: Request<B>,
-    next: Next<B>,
+    mut request: Request,
+    next: Next,
 ) -> Result<Response, impl IntoResponse> {
     match headers.get(header::COOKIE) {
         Some(cookies) => match check_authentication_cookies(cookies.to_str().unwrap()) {
@@ -116,7 +115,7 @@ pub async fn check_logged_user<B>(
                         Err(Response::builder()
                             .header(header::LOCATION, "/login")
                             .status(StatusCode::SEE_OTHER)
-                            .body(Empty::new())
+                            .body(Body::empty())
                             .unwrap())
                     }
                 }
@@ -126,7 +125,7 @@ pub async fn check_logged_user<B>(
                 Err(Response::builder()
                     .header(header::LOCATION, "/login")
                     .status(StatusCode::SEE_OTHER)
-                    .body(Empty::new())
+                    .body(Body::empty())
                     .unwrap())
             }
         },
@@ -135,7 +134,7 @@ pub async fn check_logged_user<B>(
             Err(Response::builder()
                 .header(header::LOCATION, "/login")
                 .status(StatusCode::SEE_OTHER)
-                .body(Empty::new())
+                .body(Body::empty())
                 .unwrap())
         }
     }

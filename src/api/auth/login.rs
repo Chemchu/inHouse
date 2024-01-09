@@ -1,11 +1,10 @@
 use askama::Template;
 use axum::{
     extract::State,
-    http::{HeaderMap, StatusCode},
+    http::{header, HeaderMap, StatusCode},
     response::{Html, IntoResponse},
     Form,
 };
-use reqwest::{header, Error, Response};
 use serde::{Deserialize, Serialize};
 
 use crate::components::auth::login_failed_message::LoginFailedMessageTemplate;
@@ -120,7 +119,11 @@ pub async fn login_handler(
     }
 }
 
-async fn login(state: &service::AppState, email: &str, password: &str) -> Result<Response, Error> {
+async fn login(
+    state: &service::AppState,
+    email: &str,
+    password: &str,
+) -> Result<reqwest::Response, reqwest::Error> {
     let mut body = std::collections::HashMap::new();
     body.insert("email", email);
     body.insert("password", password);

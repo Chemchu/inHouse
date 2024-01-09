@@ -1,13 +1,12 @@
 use axum::{
     async_trait,
     extract::FromRequestParts,
-    http::request::Parts,
+    http::{header, request::Parts, StatusCode},
     response::{IntoResponse, Response},
 };
 use i18n::Translator;
 use jsonwebtoken::{decode, Algorithm, DecodingKey, Validation};
 use regex::Regex;
-use reqwest::{header, StatusCode};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone)]

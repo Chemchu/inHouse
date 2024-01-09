@@ -17,4 +17,4 @@ serde = { version = "1", features = ["derive"] }
 chrono = "0.4.31"
 tracing = "0.1.37"
 log = "0.4.20"
-cached = { version = "0.46.0", features = ["tokio", "async"] }
+cached = { version = "0.47.0", features = ["tokio", "async"] }

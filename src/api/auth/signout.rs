@@ -1,5 +1,7 @@
-use axum::{http::HeaderMap, response::IntoResponse};
-use reqwest::{header, StatusCode};
+use axum::{
+    http::{header, HeaderMap, StatusCode},
+    response::IntoResponse,
+};
 
 pub async fn signout_handler(mut headers: HeaderMap) -> impl IntoResponse {
     headers.insert(

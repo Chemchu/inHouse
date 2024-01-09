@@ -1,9 +1,9 @@
 use askama::Template;
 use axum::{
     extract::State,
+    http::StatusCode,
     response::{Html, IntoResponse},
 };
-use reqwest::StatusCode;
 use service::Token;
 
 #[derive(Template)]

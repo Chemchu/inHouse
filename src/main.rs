@@ -2,7 +2,7 @@ mod api;
 mod components;
 
 use axum::{routing::get, Router};
-use std::net::SocketAddr;
+use tokio::net::TcpListener;
 use tower_http::trace::{self, TraceLayer};
 use tracing::Level;
 
@@ -48,13 +48,10 @@ async fn main() {
 
     let port = std::env::var("PORT").expect("PORT environment variable not found!");
 
-    let addr_str = format!("127.0.0.1:{}", port);
-    let addr = addr_str.parse::<SocketAddr>().unwrap();
+    let addr = format!("127.0.0.1:{}", port);
+    let listener = TcpListener::bind(&addr).await.unwrap();
 
-    tracing::info!("Application started 🚀! Serving on http://{}/", addr);
+    tracing::info!("Application started 🚀! Serving on http://{}/", &addr);
 
-    axum::Server::bind(&addr)
-        .serve(app.into_make_service())
-        .await
-        .unwrap();
+    axum::serve(listener, app).await.unwrap();
 }
