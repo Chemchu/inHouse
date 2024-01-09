@@ -6,9 +6,6 @@ pub struct Migration;
 #[async_trait::async_trait]
 impl MigrationTrait for Migration {
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
-        // Replace the sample below with your own migration scripts
-        // todo!();
-
         manager
             .create_table(
                 Table::create()
@@ -34,6 +31,17 @@ impl MigrationTrait for Migration {
             .await
             .unwrap_or_else(|_| panic!("Failed to create table {}", Viviendas::Table));
 
+        manager
+            .create_table(
+                Table::create()
+                    .table(UserVivienda::Table)
+                    .if_not_exists()
+                    .col(ColumnDef::new(UserVivienda::Id).uuid().primary_key())
+                    .to_owned(),
+            )
+            .await
+            .unwrap_or_else(|_| panic!("Failed to create table {}", UserVivienda::Table));
+
         Ok(())
     }
 
@@ -41,6 +49,10 @@ impl MigrationTrait for Migration {
         // Replace the sample below with your own migration scripts
         manager
             .drop_table(Table::drop().table(Viviendas::Table).to_owned())
+            .await?;
+
+        manager
+            .drop_table(Table::drop().table(UserVivienda::Table).to_owned())
             .await
     }
 }
@@ -68,7 +80,7 @@ enum Viviendas {
 impl std::fmt::Display for Viviendas {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Viviendas::Table => write!(f, "user_metadata"),
+            Viviendas::Table => write!(f, "viviendas"),
             Viviendas::Id => write!(f, "id"),
             Viviendas::Name => write!(f, "name"),
             Viviendas::Street => write!(f, "street"),
@@ -84,6 +96,21 @@ impl std::fmt::Display for Viviendas {
             Viviendas::CreatedAt => write!(f, "created_at"),
             Viviendas::UpdatedAt => write!(f, "updated_at"),
             Viviendas::AdditionalInfo => write!(f, "additional_info"),
+        }
+    }
+}
+
+#[derive(DeriveIden)]
+enum UserVivienda {
+    Table,
+    Id,
+}
+
+impl std::fmt::Display for UserVivienda {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            UserVivienda::Table => write!(f, "user_vivienda"),
+            UserVivienda::Id => write!(f, "id"),
         }
     }
 }
