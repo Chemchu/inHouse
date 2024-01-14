@@ -32,7 +32,7 @@ impl MigrationTrait for Migration {
 
         // This table is always created by Supabase and is not part of the migration.
         db.execute_unprepared(
-            "alter table public.user_metadata add constraint fk_user_metadata_user_id 
+            "alter table public.user_metadata add constraint fk_user_metadata_to_user
             foreign key (id) references auth.users (id) on delete cascade;",
         )
         .await
@@ -55,7 +55,7 @@ impl MigrationTrait for Migration {
 }
 
 #[derive(DeriveIden)]
-enum UserMetadata {
+pub enum UserMetadata {
     Table,
     Id,
     Username,
