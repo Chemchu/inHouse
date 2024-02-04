@@ -49,7 +49,7 @@ pub async fn signup_handler(
         return (StatusCode::OK, Html(reply_html).into_response());
     }
 
-    let email_in_use = repository::auth::exists_by_email(&state, &payload.email).await;
+    let email_in_use = repository::auth::exists_by_email(&state.conn, &payload.email).await;
     match email_in_use {
         Ok(is_email_used) => {
             if is_email_used {

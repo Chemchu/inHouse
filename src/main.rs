@@ -38,7 +38,9 @@ async fn main() {
             get(api::generic::terms_and_conditions::terms_and_conditions_page_handler)
                 .with_state(state.clone()),
         )
-        .fallback_service(get(api::generic::not_found::not_found_page_handler).with_state(state))
+        .fallback_service(
+            get(api::generic::not_found::not_found_page_handler).with_state(state.clone()),
+        )
         .layer(
             TraceLayer::new_for_http()
                 .make_span_with(trace::DefaultMakeSpan::new().level(Level::INFO))

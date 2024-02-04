@@ -8,12 +8,13 @@ use i18n::Translator;
 use jsonwebtoken::{decode, Algorithm, DecodingKey, Validation};
 use regex::Regex;
 use serde::{Deserialize, Serialize};
+use surrealdb::{engine::remote::ws::Client, Surreal};
 
 #[derive(Clone)]
 pub struct AppState {
     pub supabase_url: String,
     pub supabase_api_key: String,
-    pub conn: sea_orm::DatabaseConnection,
+    pub conn: Surreal<Client>,
     pub translator: Translator,
 }
 

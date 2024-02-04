@@ -1,11 +1,11 @@
-use std::time::Duration;
-
-use migration::{Migrator, MigratorTrait};
-use sea_orm::{ConnectOptions, Database, DatabaseConnection};
+use surrealdb::{
+    engine::remote::ws::{Client, Ws},
+    Surreal,
+};
 
 pub mod auth;
 
-pub async fn connect_to_db() -> Result<DatabaseConnection, sea_orm::DbErr> {
+pub async fn connect_to_db() -> surrealdb::Result<Surreal<Client>> {
     let conn_url = std::env::var("DATABASE_URL");
     match &conn_url {
         Ok(conn_url) => {
@@ -17,19 +17,10 @@ pub async fn connect_to_db() -> Result<DatabaseConnection, sea_orm::DbErr> {
         }
     }
 
-    let mut opt = ConnectOptions::new(conn_url.unwrap());
-    opt.max_connections(100)
-        .min_connections(5)
-        .connect_timeout(Duration::from_secs(8))
-        .acquire_timeout(Duration::from_secs(8))
-        .idle_timeout(Duration::from_secs(8))
-        .max_lifetime(Duration::from_secs(8))
-        .sqlx_logging(true)
-        .sqlx_logging_level(log::LevelFilter::Info)
-        .set_schema_search_path("public"); // Setting default PostgreSQL schema
+    let db = Surreal::new::<Ws>(conn_url.unwrap()).await?;
+    db.use_ns("public").use_db("public").await?;
 
-    let db = Database::connect(opt).await?;
-    Migrator::up(&db, None).await?;
+    // Write custom migrator and add it here
 
     Ok(db)
 }
