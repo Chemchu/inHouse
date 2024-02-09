@@ -1,10 +1,11 @@
-pub use sea_orm_migration::prelude::*;
+struct Migrator;
 
-pub struct Migrator;
+trait MigratorTrait {
+    async fn migrations() -> surrealdb::Result<()>;
+}
 
-#[async_trait::async_trait]
 impl MigratorTrait for Migrator {
-    fn migrations() -> Vec<Box<dyn MigrationTrait>> {
+    async fn migrations() -> surrealdb::Result<()> {
         // Add migrations here
         todo!()
     }

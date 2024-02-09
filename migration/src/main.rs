@@ -1,4 +1,4 @@
-#[async_std::main]
+#[tokio::main]
 async fn main() {
     // Add run migrator
     // cli::run_cli(migration::Migrator).await;
