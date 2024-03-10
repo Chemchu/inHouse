@@ -70,9 +70,6 @@ your_profile:
 settings:
   es_ES: Ajustes
   en_US: Settings
-sign_out:
-  es_ES: Cerrar sesión
-  en_US: Sign out
 search:
   es_ES: Buscar
   en_US: Search
@@ -155,7 +152,7 @@ personal_information_description:
   es_ES: Información personal y de contacto
   en_US: Personal and contact information
 change_avatar:
-  es_ES: Cambiar foto de perfil 
+  es_ES: Cambiar foto de perfil
   en_US: Change avatar
 first_name:
   es_ES: Nombre
@@ -163,9 +160,6 @@ first_name:
 last_name:
   es_ES: Apellidos
   en_US: Last name
-username:
-  es_ES: Nombre de usuario
-  en_US: Username
 change_password:
   es_ES: Cambiar contraseña
   en_US: Change password
@@ -197,7 +191,7 @@ delete_account_button:
   es_ES: Sí, eliminar mi cuenta
   en_US: Yes, delete my account
 members:
-  es_ES: Integrantes 
+  es_ES: Integrantes
   en_US: Members
 chats:
   es_ES: Chats
@@ -211,3 +205,4 @@ payments:
 events:
   es_ES: Eventos
   en_US: Events
+

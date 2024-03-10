@@ -12,9 +12,9 @@ path = "src/lib.rs"
 entity = { path = "../entity" }
 service = { path = "../service" }
 migration = { path = "../migration" }
-serde = { version = "1", features = ["derive"] }
-chrono = "0.4.31"
-tracing = "0.1.37"
-log = "0.4.20"
-surrealdb = "1.1.1"
+serde = { version = "1.0.197", features = ["derive"] }
+chrono = "0.4.35"
+tracing = "0.1.40"
+log = "0.4.21"
+surrealdb = "1.2.2"
 tokio = { version = "1.36.0", features = ["macros", "rt-multi-thread"] }

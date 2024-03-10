@@ -9,5 +9,5 @@ name = "migration"
 path = "src/lib.rs"
 
 [dependencies]
-surrealdb = "1.1.1"
+surrealdb = "1.2.2"
 tokio = { version = "1.36.0", features = ["macros", "rt-multi-thread"] }
